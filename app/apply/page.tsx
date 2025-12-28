@@ -1,0 +1,292 @@
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import Cookies from 'js-cookie'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
+
+const schools = [
+  'KNUST - Kwame Nkrumah University of Science and Technology',
+  'UG - University of Ghana',
+  'UCC - University of Cape Coast',
+  'UEW - University of Education, Winneba',
+  'UDS - University for Development Studies',
+  'Other',
+]
+
+const validationSchema = Yup.object({
+  fullName: Yup.string()
+    .min(2, 'Full name must be at least 2 characters')
+    .max(100, 'Full name must be less than 100 characters')
+    .required('Full name is required'),
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
+  phoneNumber: Yup.string()
+    .matches(/^(\+233|0)[0-9]{9}$/, 'Phone number must be a valid Ghanaian number (e.g., +233XXXXXXXXX or 0XXXXXXXXX)')
+    .required('Phone number is required'),
+  school: Yup.string()
+    .required('Please select your school'),
+  level: Yup.string()
+    .oneOf(['100', '200', '300', '400'], 'Please select a valid level')
+    .required('Level is required'),
+  loanAmount: Yup.number()
+    .min(100, 'Minimum loan amount is GHS 100')
+    .max(100000, 'Maximum loan amount is GHS 100,000')
+    .required('Loan amount is required')
+    .typeError('Loan amount must be a number'),
+  reason: Yup.string()
+    .min(10, 'Reason must be at least 10 characters')
+    .max(500, 'Reason must be less than 500 characters')
+    .required('Reason for loan is required'),
+})
+
+export default function Apply() {
+  const router = useRouter()
+
+  useEffect(() => {
+    // Check for role cookie since token is httpOnly
+    const role = Cookies.get('role')
+    if (!role) {
+      router.push('/login')
+      return
+    }
+  }, [router])
+
+  const handleSubmit = async (values: any, { setSubmitting, setStatus }: any) => {
+    try {
+      const response = await fetch('/api/loans/apply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: values.fullName,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          school: values.school,
+          level: values.level,
+          loanAmount: values.loanAmount,
+          reason: values.reason,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setStatus({ success: 'Application submitted successfully! You will be notified once it is reviewed.' })
+        setTimeout(() => {
+          router.push('/dashboard')
+        }, 2000)
+      } else {
+        setStatus({ error: data.error || 'Failed to submit application. Please try again.' })
+      }
+    } catch (error) {
+      setStatus({ error: 'An error occurred. Please try again.' })
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <main className="min-h-screen py-16 bg-gray-50">
+      <div className="container mx-auto px-4 max-w-2xl">
+        <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+          Apply for a Loan
+        </h1>
+
+        <Formik
+          initialValues={{
+            fullName: '',
+            email: '',
+            phoneNumber: '',
+            school: '',
+            level: '',
+            loanAmount: '',
+            reason: '',
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting, errors, touched, status }) => (
+            <Form className="bg-white p-8 rounded-lg shadow-md">
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Full Name <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                      errors.fullName && touched.fullName
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                    placeholder="Enter your full name"
+                  />
+                  <ErrorMessage name="fullName" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Email <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="email"
+                    id="email"
+                    name="email"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                      errors.email && touched.email
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                    placeholder="your.email@example.com"
+                  />
+                  <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                <div>
+                  <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                      errors.phoneNumber && touched.phoneNumber
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                    placeholder="+233 XX XXX XXXX or 0XX XXX XXXX"
+                  />
+                  <ErrorMessage name="phoneNumber" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                <div>
+                  <label htmlFor="school" className="block text-sm font-semibold text-gray-700 mb-2">
+                    School / University <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    as="select"
+                    id="school"
+                    name="school"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white ${
+                      errors.school && touched.school
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                  >
+                    <option value="" className="bg-gray-800">Select your school</option>
+                    {schools.map((school) => (
+                      <option key={school} value={school} className="bg-gray-800">
+                        {school}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage name="school" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                <div>
+                  <label htmlFor="level" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Level <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    as="select"
+                    id="level"
+                    name="level"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white ${
+                      errors.level && touched.level
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                  >
+                    <option value="" className="bg-gray-800">Select your level</option>
+                    <option value="100" className="bg-gray-800">100</option>
+                    <option value="200" className="bg-gray-800">200</option>
+                    <option value="300" className="bg-gray-800">300</option>
+                    <option value="400" className="bg-gray-800">400</option>
+                  </Field>
+                  <ErrorMessage name="level" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                <div>
+                  <label htmlFor="loanAmount" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Loan Amount (GHS) <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="number"
+                    id="loanAmount"
+                    name="loanAmount"
+                    min="100"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                      errors.loanAmount && touched.loanAmount
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                    placeholder="Enter amount in GHS"
+                  />
+                  <ErrorMessage name="loanAmount" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                <div>
+                  <label htmlFor="reason" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Reason for Loan <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    as="textarea"
+                    id="reason"
+                    name="reason"
+                    rows={4}
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 resize-none ${
+                      errors.reason && touched.reason
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                    placeholder="Please explain why you need this loan..."
+                  />
+                  <ErrorMessage name="reason" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                {status?.success && (
+                  <div className="bg-green-50 border-2 border-green-200 text-green-700 p-4 rounded-lg">
+                    <p className="font-medium">{status.success}</p>
+                  </div>
+                )}
+
+                {status?.error && (
+                  <div className="bg-red-50 border-2 border-red-200 text-red-700 p-4 rounded-lg">
+                    <p className="font-medium">{status.error}</p>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-primary-600 text-white py-3.5 rounded-lg font-semibold hover:bg-primary-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Submitting...
+                    </span>
+                  ) : (
+                    'Submit Application'
+                  )}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </main>
+  )
+}
+
+
