@@ -15,10 +15,10 @@ const validationSchema = Yup.object({
     .email('Invalid email address')
     .required('Email is required'),
   ghanaCard: Yup.string()
-    .matches(/^GHA-[A-Z0-9]+-[A-Z0-9]$/i, 'Ghana Card must be in format: GHA-XXXXXXXX-X')
+    .matches(/^GHA-[0-9]+-[0-9]$/i, 'Ghana Card must be in format: GHA-XXXXXXXX-X').length(15, 'Ghana Card must be exactly 15 characters')
     .required('Ghana Card number is required'),
   studentId: Yup.string()
-    .min(3, 'Student ID must be at least 3 characters')
+    .length(8, 'Student ID must be exactly 8 characters')
     .required('Student ID is required'),
   password: Yup.string()
     .min(6, 'Password must be at least 6 characters')
@@ -72,7 +72,7 @@ export default function Register() {
       formData.append('file', file)
       formData.append('type', type)
 
-      const response = await fetch('/api/upload', {
+      const response = await fetch('/api/filesUpload', {
         method: 'POST',
         body: formData,
       })

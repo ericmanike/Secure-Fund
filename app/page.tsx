@@ -32,7 +32,7 @@ export default function Home() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-slate-300">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 text-gray-800">
             Benefits for Ghanaian Students
@@ -65,10 +65,10 @@ export default function Home() {
                 <Zap className="w-12 h-12 text-primary-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-800">
-                Quick Approval
+                Lower Interest Rates
               </h3>
               <p className="text-gray-600">
-                Fast processing and approval for eligible students
+                Benefit from competitive interest rates tailored for students
               </p>
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gray-100">
+      <section className="py-16 ">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">
             Ready to Start Your Application?
@@ -86,7 +86,7 @@ export default function Home() {
           </p>
           <Link
             href="/apply"
-            className="bg-primary-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-primary-700 transition duration-300 inline-block"
+            className="bg-slate-600 hover:bg-slate-700 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg  transition duration-300 inline-block"
           >
             Apply Now
           </Link>

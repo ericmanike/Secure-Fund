@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Cloud from '@/lib/cloudinary'
 
 export const metadata: Metadata = {
   title: 'About Us - Secure Fund | Student Loan Platform',
@@ -13,9 +14,9 @@ export default function About() {
         <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
           About Secure Fund
         </h1>
-
-        <section className="bg-white p-8 rounded-lg shadow-md mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-primary-600">
+        <Cloud />
+        <section className="bg-slate-300 p-8 rounded-lg shadow-md mb-8">
+          <h2 className="text-2xl text-center  decoration-solid font-semibold mb-4 text-primary-600">
             Purpose of the Platform
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
@@ -31,8 +32,8 @@ export default function About() {
           </p>
         </section>
 
-        <section className="bg-white p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-6 text-primary-600">
+        <section className="bg-slate-300 p-8 rounded-lg shadow-md">
+          <h2 className="text-2xl text-center decoration-solid font-semibold mb-6 text-primary-600">
             How the Loan Process Works
           </h2>
           <div className="space-y-6">

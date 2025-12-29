@@ -8,13 +8,10 @@ import * as Yup from 'yup'
 
 const schools = [
   'KNUST - Kwame Nkrumah University of Science and Technology',
-  'UG - University of Ghana',
-  'UCC - University of Cape Coast',
-  'UEW - University of Education, Winneba',
-  'UDS - University for Development Studies',
+  
   'Other',
 ]
-
+  
 const validationSchema = Yup.object({
   fullName: Yup.string()
     .min(2, 'Full name must be at least 2 characters')

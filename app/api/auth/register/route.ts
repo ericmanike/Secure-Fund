@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
     const { fullName, email, ghanaCard, studentId, password, ghanaCardImage, studentIdImage } = await request.json()
 
     if (!fullName || !email || !password || !ghanaCard || !studentId || !ghanaCardImage || !studentIdImage) {
+      console.log('Missing fields:', { fullName, email, password, ghanaCard, studentId, ghanaCardImage, studentIdImage })
       return NextResponse.json(
         { error: 'All fields are required, including document images' },
         { status: 400 }
