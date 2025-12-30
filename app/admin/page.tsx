@@ -14,7 +14,7 @@ interface Loan {
   level: string
   loanAmount: number
   reason: string
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
   dateReviewed?: string
   reviewedBy?: string
@@ -29,7 +29,7 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [loans, setLoans] = useState<Loan[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
+  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'repaid'>('all')
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null)
   const [userDocuments, setUserDocuments] = useState<UserDocuments | null>(null)
   const [loadingDocuments, setLoadingDocuments] = useState(false)
@@ -88,7 +88,7 @@ export default function AdminDashboard() {
     }
   }
 
-  const updateLoanStatus = async (loanId: string, status: 'approved' | 'rejected') => {
+  const updateLoanStatus = async (loanId: string, status: 'approved' | 'rejected' | 'repaid') => {
     if (!confirm(`Are you sure you want to ${status} this loan application?`)) {
       return
     }
@@ -183,6 +183,22 @@ export default function AdminDashboard() {
             >
               Rejected ({loans.filter(l => l.status === 'rejected').length})
             </button>
+
+
+
+          <button
+              onClick={() => setFilter('repaid')}
+              className={`px-4 py-2 rounded-lg font-semibold transition ${
+                filter === 'repaid' 
+                  ? 'bg-primary-600 text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Repaid ({loans.filter(l => l.status === 'repaid').length})
+            </button>
+
+
+
           </div>
         </div>
 
@@ -194,9 +210,9 @@ export default function AdminDashboard() {
             </div>
           ) : (
             <div className="overflow-x-auto -mx-6 md:mx-0">
-              <table className="w-full min-w-[800px] md:min-w-0 border-solid border-2 border-gray-200">
+              <table className="w-full text-[12px] min-w-[800px] md:min-w-0 border-solid border-2 border-gray-200">
                 <thead>
-                  <tr className="border-b ">
+                  <tr className="border-b  ">
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Email</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Phone</th>
@@ -211,7 +227,7 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {filteredLoans.map((loan) => (
-                    <tr key={loan.id} className="border-b hover:bg-gray-50">
+                    <tr key={loan.id} className="border-b bottom-2  hover:bg-gray-50">
                       <td className="py-3 px-4">{loan.fullName}</td>
                       <td className="py-3 px-4">{loan.email}</td>
                       <td className="py-3 px-4">{loan.phoneNumber}</td>
@@ -239,7 +255,7 @@ export default function AdminDashboard() {
                               }}
                               className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition"
                             >
-                              View Documents
+                              View Docs
                             </button>
                             <div className="flex space-x-2">
                               <button
@@ -254,6 +270,15 @@ export default function AdminDashboard() {
                               >
                                 Reject
                               </button>
+                            
+                             <button
+                                onClick={() => updateLoanStatus(loan.id, 'repaid')}
+                                className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition"
+                              >
+                                Repaid
+                              </button>
+
+
                             </div>
                           </div>
                         )}
@@ -307,12 +332,6 @@ export default function AdminDashboard() {
                   </div>
                 ) : userDocuments ? (
                   <div>
-                    {/* Debug Info */}
-                    <div className="mb-4 p-3 bg-gray-100 rounded text-xs">
-                      <p><strong>Ghana Card URL:</strong> {userDocuments.ghanaCardImage || 'Not set'}</p>
-                      <p><strong>Student ID URL:</strong> {userDocuments.studentIdImage || 'Not set'}</p>
-                    </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Ghana Card */}
                       <div>
