@@ -194,9 +194,9 @@ export default function AdminDashboard() {
             </div>
           ) : (
             <div className="overflow-x-auto -mx-6 md:mx-0">
-              <table className="w-full min-w-[800px] md:min-w-0">
+              <table className="w-full min-w-[800px] md:min-w-0 border-solid border-2 border-gray-200">
                 <thead>
-                  <tr className="border-b">
+                  <tr className="border-b ">
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Email</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Phone</th>

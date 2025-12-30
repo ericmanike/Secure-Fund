@@ -13,7 +13,7 @@ export interface Loan {
   level: string
   loanAmount: number
   reason: string
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
   dateReviewed?: string
   reviewedBy?: string

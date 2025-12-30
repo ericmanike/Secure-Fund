@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
+
 export interface IUser extends Document {
   fullName: string
   email: string
@@ -33,10 +34,12 @@ const UserSchema: Schema = new Schema(
     },
     ghanaCard: {
       type: String,
+      unique: true,
       trim: true,
     },
     studentId: {
       type: String,
+      unique: true,
       trim: true,
     },
     ghanaCardImage: {

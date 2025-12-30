@@ -38,6 +38,7 @@ export async function PATCH(
 
     return NextResponse.json({ message: 'Loan status updated successfully' })
   } catch (error) {
+    
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

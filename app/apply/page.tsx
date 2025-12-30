@@ -1,14 +1,15 @@
 'use client'
 
-import { useEffect } from 'react'
+import {  useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import { useAuth } from '@/lib/authContext'
+
 
 const schools = [
   'KNUST - Kwame Nkrumah University of Science and Technology',
-  
   'Other',
 ]
   
@@ -30,7 +31,7 @@ const validationSchema = Yup.object({
     .required('Level is required'),
   loanAmount: Yup.number()
     .min(100, 'Minimum loan amount is GHS 100')
-    .max(100000, 'Maximum loan amount is GHS 100,000')
+    .max(1000, 'Maximum loan amount is GHS 1,000')
     .required('Loan amount is required')
     .typeError('Loan amount must be a number'),
   reason: Yup.string()
@@ -41,6 +42,8 @@ const validationSchema = Yup.object({
 
 export default function Apply() {
   const router = useRouter()
+  const { user, loading } = useAuth()
+  const [loan, setLoan] = useState<any>(null)
 
   useEffect(() => {
     // Check for role cookie since token is httpOnly
@@ -49,7 +52,53 @@ export default function Apply() {
       router.push('/login')
       return
     }
+  
   }, [router])
+
+
+  useEffect(() => {
+    const fetchLoan = async () => {
+      try {
+        console.log('Fetching loan data...')
+        const response = await fetch('/api/loans')
+        if (response.ok) {
+          const data = await response.json()
+          setLoan(data.loans)
+          console.log('Fetched loan:', data.loans)
+        }
+      } catch (error) {
+        console.error('Error fetching loan:', error)
+      }
+    }
+
+    fetchLoan()
+  }
+  , [])
+
+
+ 
+
+  if (user?.role === 'student'  && loan?.some((l: any) =>l.status !== 'repaid' && l.userId === user.id)) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl text-center p-8 bg-white rounded-lg shadow-md">
+          <h1 className="text-3xl font-bold mb-4 text-gray-800">Application Already Submitted</h1>
+          <p className="text-gray-700">
+            You have already submitted a loan application. Please wait for it to be reviewed.
+          </p>
+          <button onClick={()=>router.push(`/repay/${loan[0].id}`)}
+            className='bg-slate-900 text-white p-3 rounded mt-4'
+            
+            >Repay Now</button>
+        </div>
+      </main>
+    )
+  }
+
+  
+
+
+
 
   const handleSubmit = async (values: any, { setSubmitting, setStatus }: any) => {
     try {
@@ -84,10 +133,21 @@ export default function Apply() {
     } finally {
       setSubmitting(false)
     }
+  
+  }
+
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl">Loading...</div>
+      </main>
+    )
   }
 
   return (
     <main className="min-h-screen py-16 bg-gray-50">
+
       <div className="container mx-auto px-4 max-w-2xl">
         <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
           Apply for a Loan
@@ -218,6 +278,7 @@ export default function Apply() {
                     type="number"
                     id="loanAmount"
                     name="loanAmount"
+                    max="1000"
                     min="100"
                     className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                       errors.loanAmount && touched.loanAmount

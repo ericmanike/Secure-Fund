@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
+import Cloud from '@/lib/cloudinary'
 
 interface Loan {
   id: string
@@ -14,7 +15,7 @@ interface Loan {
   level: string
   loanAmount: number
   reason: string
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
 }
 
@@ -25,6 +26,8 @@ interface User {
   ghanaCard?: string
   studentId?: string
   role: string
+  ghanaCardImage?: string
+  studentIdImage?: string
 }
 
 export default function Dashboard() {
@@ -51,6 +54,7 @@ export default function Dashboard() {
       if (response.ok) {
         const data = await response.json()
         setUser(data.user)
+        console.log('Fetched user:', data.user)
       }
     } catch (error) {
       console.error('Error fetching user:', error)
@@ -62,6 +66,7 @@ export default function Dashboard() {
       const response = await fetch('/api/loans')
       if (response.ok) {
         const data = await response.json()
+        console.log('Fetched loans:', data)
         setLoans(data.loans)
       }
     } catch (error) {
@@ -75,6 +80,8 @@ export default function Dashboard() {
     switch (status) {
       case 'approved':
         return 'bg-green-100 text-green-800'
+      case 'repaid':
+        return 'bg-blue-100 text-blue-800'
       case 'rejected':
         return 'bg-red-100 text-red-800'
       default:
@@ -93,13 +100,13 @@ export default function Dashboard() {
   return (
     <main className="min-h-screen py-16 bg-gray-50">
       <div className="container mx-auto px-4 max-w-6xl">
-        <h1 className="text-4xl font-bold mb-8 text-gray-800">Student Dashboard</h1>
+        <h1 className="text-4xl font-bold mb-8 text-gray-800">Application Dashboard</h1>
 
         {/* User Profile Section */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-primary-600">Profile Information</h2>
           {user && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <p><span className="font-semibold text-gray-700">Full Name:</span> <span className="text-gray-600">{user.fullName}</span></p>
                 <p><span className="font-semibold text-gray-700">Email:</span> <span className="text-gray-600">{user.email}</span></p>
@@ -112,6 +119,13 @@ export default function Dashboard() {
                   <p><span className="font-semibold text-gray-700">Student ID:</span> <span className="text-gray-600">{user.studentId}</span></p>
                 )}
               </div>
+              <div className="space-y-2 grid grid-cols-2 items-center justify-center">
+            
+            <Cloud src={user?.ghanaCardImage} alt="Ghana Card Image" width={100} height={100} />
+            <Cloud src={user?.studentIdImage} alt="Student ID Image" width={100} height={100} />
+     
+
+              </div>
             </div>
           )}
         </div>
@@ -120,12 +134,7 @@ export default function Dashboard() {
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold text-primary-600">Loan Applications</h2>
-            <Link
-              href="/apply"
-              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition"
-            >
-              New Application
-            </Link>
+          
           </div>
 
           {loans.length === 0 ? (

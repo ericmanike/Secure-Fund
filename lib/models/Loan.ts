@@ -9,7 +9,7 @@ export interface ILoan extends Document {
   level: string
   loanAmount: number
   reason: string
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: Date
   dateReviewed?: Date
   reviewedBy?: string
@@ -60,7 +60,7 @@ const LoanSchema: Schema = new Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'approved', 'rejected'],
+      enum: ['pending', 'approved', 'rejected', 'repaid'],
       default: 'pending',
     },
     dateApplied: {
