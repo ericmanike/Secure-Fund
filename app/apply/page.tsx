@@ -34,14 +34,13 @@ const validationSchema = Yup.object({
     .max(1000, 'Maximum loan amount is GHS 1,000')
     .required('Loan amount is required')
     .typeError('Loan amount must be a number'),
-  loantype: Yup.string().oneOf(['9',
-     '11']).required('Please select a loan type'),
+  loanType:Yup.string().oneOf(['9','11']).required('Please select a loan type'),
   scholarStatus: Yup.string()
-    .oneOf(['scholar', 'non-scholar'], 'Please select a valid status')
+    .oneOf(['yes', 'no'], 'Please select a valid status')
     .required('Scholar status is required'),
   cohort: Yup.string()
    .when('scholarStatus', ([scholarStatus], schema) => {
-  return scholarStatus === 'scholar' 
+  return scholarStatus === 'yes' 
     ? schema.required('Required')
     : schema.strip();
 }).oneOf([ '8','9', 
@@ -120,6 +119,7 @@ export default function Apply() {
 
 
   const handleSubmit = async (values: any, { setSubmitting, setStatus }: any) => {
+    console.log('Submitting application with values:', values)
     try {
       const response = await fetch('/api/loans/apply', {
         method: 'POST',
@@ -133,6 +133,9 @@ export default function Apply() {
           school: values.school,
           level: values.level,
           loanAmount: values.loanAmount,
+          scholar: values.scholarStatus,
+          cohort: values.cohort || 'N/A',
+          loanType: values.loanType,
           reason: values.reason,
         }),
       })
@@ -181,12 +184,17 @@ export default function Apply() {
             level: '',
             scholarStatus: '',
             cohort: '',
-            loantype: '',
+            loanType: '',
             loanAmount: '',
             reason: '',
           }}
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          
+          onSubmit={
+    
+              handleSubmit
+        
+          }
         >
           {({ isSubmitting, errors, touched, status,values }) => (
             <Form className="bg-white p-8 rounded-lg shadow-md">
@@ -293,24 +301,24 @@ export default function Apply() {
                 </div>
 
                  <div>
-                  <label htmlFor="loantype" className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="loanType" className="block text-sm font-semibold text-gray-700 mb-2">
                   Select  Loan Type <span className="text-red-500">*</span>
                   </label>
                   <Field
                     as="select"
-                    id="loantype"
-                    name="loantype"
+                    id="loanType"
+                    name="loanType"
                     className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
-                      errors.loantype && touched.loantype
+                      errors.loanType && touched.loanType
                         ? 'border-red-500'
                         : 'border-gray-700'
                     }`}
                   >
                     <option value="" className="bg-gray-800">Select your loan type</option>
-                    <option value="9" className="bg-gray-800">Two weeks - 9% interest rate</option>
-                    <option value="11" className="bg-gray-800">One month - 11% interest rate</option>
+                    <option value={9} className="bg-gray-800">Two weeks - 9% interest rate</option>
+                    <option value={11} className="bg-gray-800">One month - 11% interest rate</option>
                   </Field>
-                  <ErrorMessage name="loantype" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="loanType" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
                 
 
@@ -329,14 +337,14 @@ export default function Apply() {
                     }`}
                   >
                     <option value="" className="bg-gray-800">Select one</option>
-                    <option value="scholar" className="bg-gray-800">Scholar</option>
-                    <option value="non-scholar" className="bg-gray-800">Non-Scholar</option>
+                    <option value="yes" className="bg-gray-800">Yes</option>
+                    <option value="no" className="bg-gray-800">No</option>
                   </Field>
                   <ErrorMessage name="scholarStatus" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
                   
 
-                  {values.scholarStatus === 'scholar' &&( <div>
+                  {values.scholarStatus === 'yes' &&( <div>
                   <label htmlFor="scholarStatus" className="block text-sm font-semibold text-gray-700 mb-2">
                     Cohort <span className="text-red-500">*</span>
                   </label>

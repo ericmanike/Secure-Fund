@@ -15,9 +15,10 @@ export async function POST(request: NextRequest) {
 
     const userId = user.userId
 
-    const { fullName, email, phoneNumber, school, level, loanAmount, reason } = await request.json()
+    const { fullName, email, phoneNumber, school, level, loanAmount,scholar, cohort, loanType, reason } = await request.json()
 
-    if (!fullName || !email || !phoneNumber || !school || !level || !loanAmount || !reason) {
+    if (!fullName || !email || !phoneNumber || !school || !level || !loanAmount || !reason || !scholar || !cohort || !loanType) {
+      console.log('Missing fields:', { fullName, email, phoneNumber, school, level, loanAmount, reason,scholar,cohort,loanType })
       return NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
@@ -32,11 +33,14 @@ export async function POST(request: NextRequest) {
       school,
       level,
       loanAmount: parseFloat(loanAmount),
+      scholar,
+      cohort,
+      loanType,
       reason,
       status: 'pending' as const,
       dateApplied: new Date().toISOString(),
     }
-
+     console.log('Saving loan application on API route:', loan)
     const loanId = await saveLoan(loan)
 
     return NextResponse.json(
@@ -44,6 +48,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
+    console.log('Error processing loan application:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

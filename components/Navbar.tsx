@@ -70,8 +70,8 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center">
-            <div className="flex items-center space-x-1">
+          <div className="hidden md:flex items-center ">
+            <div className="flex items-center space-x-3">
               <Link href="/" className={navLinkClass('/')}>
                 <Home className="w-4 h-4" />
                 <span>Home</span>

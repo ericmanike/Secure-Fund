@@ -3,6 +3,8 @@ import User, { IUser } from './models/User'
 import Loan, { ILoan } from './models/Loan'
 import { User as UserType } from './auth'
 
+
+
 export interface Loan {
   id: string
   userId: string
@@ -12,6 +14,9 @@ export interface Loan {
   school: string
   level: string
   loanAmount: number
+  scholar: string
+  cohort: string
+  loanType: Number
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
@@ -34,7 +39,7 @@ function convertUser(user: IUser): UserType {
   }
 }
 
-// Helper function to convert ILoan to Loan type
+// Helper function to convert ILoan to Loan  type
 function convertLoan(loan: ILoan): Loan {
   return {
     id: loan._id.toString(),
@@ -45,6 +50,9 @@ function convertLoan(loan: ILoan): Loan {
     school: loan.school,
     level: loan.level,
     loanAmount: loan.loanAmount,
+    scholar: loan.scholar,
+    cohort: loan.cohort,
+    loanType: loan.loanType,
     reason: loan.reason,
     status: loan.status,
     dateApplied: loan.dateApplied.toISOString(),
@@ -134,6 +142,9 @@ export async function saveLoan(loan: Omit<Loan, 'id'>): Promise<string> {
       school: loan.school,
       level: loan.level,
       loanAmount: loan.loanAmount,
+      scholar: loan.scholar,
+      cohort: loan.cohort,
+      loanType: loan.loanType,
       reason: loan.reason,
       status: loan.status,
       dateApplied: new Date(loan.dateApplied),

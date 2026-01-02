@@ -8,6 +8,9 @@ export interface ILoan extends Document {
   school: string
   level: string
   loanAmount: number
+  scholar: string
+  cohort: string
+  loanType: Number
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: Date
@@ -53,6 +56,22 @@ const LoanSchema: Schema = new Schema(
       required: true,
       min: 0,
     },
+    scholar: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    cohort: {
+      type: String,
+      trim: true,
+        
+    },
+    loanType: {
+      type: Number,
+      required: true,
+     
+    },
+
     reason: {
       type: String,
       required: true,
