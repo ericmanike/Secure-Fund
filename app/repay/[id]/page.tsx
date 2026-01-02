@@ -2,8 +2,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Cookies from 'js-cookie'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
 
 interface Loan {
   id: string
@@ -188,7 +186,7 @@ useEffect(() => {
             <button
               onClick={handlePayment}
               disabled={submitting}
-              className={`w-full bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-primary-700 transition duration-300 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {submitting ? 'Processing Payment...' : `Pay GHS ${loan.loanAmount.toLocaleString()}`}
             </button>

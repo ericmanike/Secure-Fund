@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import { Menu, X, Home, Info, FileText, User, LogOut, Shield, LayoutDashboard } from 'lucide-react'
-
+import AdminPanelSettingsTwoToneIcon from '@mui/icons-material/AdminPanelSettingsTwoTone';
 export default function Navbar() {
   const pathname = usePathname()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -14,7 +14,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
-    // Check for role cookie since token is httpOnly
+    // Check for role cookie 
     const role = Cookies.get('role')
     setIsLoggedIn(!!role)
     setUserRole(role || null)
@@ -61,10 +61,10 @@ export default function Navbar() {
             className="flex items-center space-x-2 group"
             onClick={closeMobileMenu}
           >
-            <div className="bg-primary-600 p-2 rounded-lg group-hover:bg-primary-700 transition-colors">
+            <div className="bg-blue-600 p-2 rounded-lg group-hover:bg-blue-700 transition-colors">
               <Shield className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl md:text-2xl font-bold text-white group-hover:text-primary-400 transition-colors">
+            <span className="text-xl md:text-2xl font-bold text-white group-hover:text-blue-600 transition-colors">
               Secure Fund
             </span>
           </Link>
@@ -91,7 +91,7 @@ export default function Navbar() {
                 <>
                   {userRole === 'admin' ? (
                     <Link href="/admin" className={navLinkClass('/admin')}>
-                      <Shield className="w-4 h-4" />
+                      <AdminPanelSettingsTwoToneIcon className="w-4 h-4" />
                       <span>Admin</span>
                     </Link>
                   ) : (
@@ -116,7 +116,7 @@ export default function Navbar() {
                   </Link>
                   <Link
                     href="/register"
-                    className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                    className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                   >
                     <User className="w-4 h-4" />
                     <span>Register</span>
@@ -236,7 +236,7 @@ export default function Navbar() {
                   <Link
                     href="/register"
                     onClick={closeMobileMenu}
-                    className="flex items-center space-x-2 bg-primary-600 text-white px-3 py-2 rounded-lg hover:bg-primary-700 transition-all duration-200"
+                    className="flex items-center space-x-2 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200"
                   >
                     <User className="w-4 h-4" />
                     <span>Register</span>

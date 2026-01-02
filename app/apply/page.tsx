@@ -12,7 +12,7 @@ const schools = [
   'KNUST - Kwame Nkrumah University of Science and Technology',
   'Other',
 ]
-  
+
 const validationSchema = Yup.object({
   fullName: Yup.string()
     .min(2, 'Full name must be at least 2 characters')
@@ -27,13 +27,27 @@ const validationSchema = Yup.object({
   school: Yup.string()
     .required('Please select your school'),
   level: Yup.string()
-    .oneOf(['100', '200', '300', '400'], 'Please select a valid level')
+    .oneOf(['100', '200', '300', '400','500', '600'], 'Please select a valid level')
     .required('Level is required'),
   loanAmount: Yup.number()
     .min(100, 'Minimum loan amount is GHS 100')
     .max(1000, 'Maximum loan amount is GHS 1,000')
     .required('Loan amount is required')
     .typeError('Loan amount must be a number'),
+  loantype: Yup.string().oneOf(['9',
+     '11']).required('Please select a loan type'),
+  scholarStatus: Yup.string()
+    .oneOf(['scholar', 'non-scholar'], 'Please select a valid status')
+    .required('Scholar status is required'),
+  cohort: Yup.string()
+   .when('scholarStatus', ([scholarStatus], schema) => {
+  return scholarStatus === 'scholar' 
+    ? schema.required('Required')
+    : schema.strip();
+}).oneOf([ '8','9', 
+  '10', '11', '12'], 
+  'Please select a valid cohort'),
+
   reason: Yup.string()
     .min(10, 'Reason must be at least 10 characters')
     .max(500, 'Reason must be less than 500 characters')
@@ -51,8 +65,13 @@ export default function Apply() {
     if (!role) {
       router.push('/login')
       return
+    } else if (role == 'admin') {
+      router.push('/admin')
+      return
     }
-  
+    
+
+
   }, [router])
 
 
@@ -78,7 +97,7 @@ export default function Apply() {
 
  
 
-  if (user?.role === 'student'  && loan?.some((l: any) =>l.status !== 'repaid' && l.userId === user.id)) {
+  if (user?.role === 'student'  && loan?.some((l: any) =>l.status !== 'repaid' &&  l.status !=='rejected' && l.userId === user.id)) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-xl text-center p-8 bg-white rounded-lg shadow-md">
@@ -160,13 +179,16 @@ export default function Apply() {
             phoneNumber: '',
             school: '',
             level: '',
+            scholarStatus: '',
+            cohort: '',
+            loantype: '',
             loanAmount: '',
             reason: '',
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting, errors, touched, status }) => (
+          {({ isSubmitting, errors, touched, status,values }) => (
             <Form className="bg-white p-8 rounded-lg shadow-md">
               <div className="space-y-6">
                 <div>
@@ -177,7 +199,7 @@ export default function Apply() {
                     type="text"
                     id="fullName"
                     name="fullName"
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                       errors.fullName && touched.fullName
                         ? 'border-red-500'
                         : 'border-gray-700'
@@ -195,7 +217,7 @@ export default function Apply() {
                     type="email"
                     id="email"
                     name="email"
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                       errors.email && touched.email
                         ? 'border-red-500'
                         : 'border-gray-700'
@@ -213,7 +235,7 @@ export default function Apply() {
                     type="tel"
                     id="phoneNumber"
                     name="phoneNumber"
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                       errors.phoneNumber && touched.phoneNumber
                         ? 'border-red-500'
                         : 'border-gray-700'
@@ -231,7 +253,7 @@ export default function Apply() {
                     as="select"
                     id="school"
                     name="school"
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white ${
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
                       errors.school && touched.school
                         ? 'border-red-500'
                         : 'border-gray-700'
@@ -255,7 +277,7 @@ export default function Apply() {
                     as="select"
                     id="level"
                     name="level"
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white ${
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
                       errors.level && touched.level
                         ? 'border-red-500'
                         : 'border-gray-700'
@@ -270,6 +292,77 @@ export default function Apply() {
                   <ErrorMessage name="level" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
 
+                 <div>
+                  <label htmlFor="loantype" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Select  Loan Type <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    as="select"
+                    id="loantype"
+                    name="loantype"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
+                      errors.loantype && touched.loantype
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                  >
+                    <option value="" className="bg-gray-800">Select your loan type</option>
+                    <option value="9" className="bg-gray-800">Two weeks - 9% interest rate</option>
+                    <option value="11" className="bg-gray-800">One month - 11% interest rate</option>
+                  </Field>
+                  <ErrorMessage name="loantype" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+                
+
+                  <div>
+                  <label htmlFor="scholarStatus" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Are you a Scholar? <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    as="select"
+                    id="scholarStatus"
+                    name="scholarStatus"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
+                      errors.scholarStatus && touched.scholarStatus
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                  >
+                    <option value="" className="bg-gray-800">Select one</option>
+                    <option value="scholar" className="bg-gray-800">Scholar</option>
+                    <option value="non-scholar" className="bg-gray-800">Non-Scholar</option>
+                  </Field>
+                  <ErrorMessage name="scholarStatus" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+                  
+
+                  {values.scholarStatus === 'scholar' &&( <div>
+                  <label htmlFor="scholarStatus" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Cohort <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    as="select"
+                    id="cohort"
+                    name="cohort"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
+                      errors.cohort && touched.cohort
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                  >
+                    <option value="" className="bg-gray-800">Select your Cohort</option>
+                    <option value="8" className="bg-gray-800">Cohort 8</option>
+                    <option value="9" className="bg-gray-800">Cohort 9</option>
+                    <option value="10" className="bg-gray-800">Cohort 10</option>
+                    <option value="11" className="bg-gray-800">Cohort 11</option>
+                    <option value="12" className="bg-gray-800">Cohort 12</option>
+                  </Field>
+                  <ErrorMessage name="cohort" component="div" className="text-red-500 text-sm mt-1" />
+                </div>)
+}
+
+
+              {/* Loan Amount and Reason Fields */}
                 <div>
                   <label htmlFor="loanAmount" className="block text-sm font-semibold text-gray-700 mb-2">
                     Loan Amount (GHS) <span className="text-red-500">*</span>
@@ -280,16 +373,20 @@ export default function Apply() {
                     name="loanAmount"
                     max="1000"
                     min="100"
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                    defaultValue={100}
+                    step={50}
+                     
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                       errors.loanAmount && touched.loanAmount
                         ? 'border-red-500'
                         : 'border-gray-700'
                     }`}
-                    placeholder="Enter amount in GHS"
+                    placeholder="Enter amount between GHS100.00 and GHS1,000.00"
                   />
                   <ErrorMessage name="loanAmount" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
-
+                
+                {/* Reason Field */}
                 <div>
                   <label htmlFor="reason" className="block text-sm font-semibold text-gray-700 mb-2">
                     Reason for Loan <span className="text-red-500">*</span>
@@ -299,7 +396,7 @@ export default function Apply() {
                     id="reason"
                     name="reason"
                     rows={4}
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 resize-none ${
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 resize-none ${
                       errors.reason && touched.reason
                         ? 'border-red-500'
                         : 'border-gray-700'
@@ -324,7 +421,7 @@ export default function Apply() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-primary-600 text-white py-3.5 rounded-lg font-semibold hover:bg-primary-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                  className="w-full bg-blue-600 text-white py-3.5 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center">

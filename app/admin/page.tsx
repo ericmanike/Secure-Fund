@@ -35,6 +35,12 @@ export default function AdminDashboard() {
   const [loadingDocuments, setLoadingDocuments] = useState(false)
   const [showDocumentsModal, setShowDocumentsModal] = useState(false)
 
+//comfirm state
+
+const [confirmstate, setConfirmstate] = useState(false);
+
+
+
   useEffect(() => {
     // Check for role cookie since token is httpOnly
     const role = Cookies.get('role')
@@ -126,6 +132,28 @@ export default function AdminDashboard() {
   const filteredLoans = filter === 'all' 
     ? loans 
     : loans.filter(loan => loan.status === filter)
+
+
+  const deleteLoan = async (loanId:string) => {
+    try {
+      const response = await fetch(`/api/loans/delete?loanId=${loanId}`, {
+        method: 'DELETE',
+      })
+      if (response.ok) {
+        alert('Loan application deleted successfully')
+        setShowDocumentsModal(false)
+        setSelectedLoan(null)
+        fetchLoans()
+       
+      }
+      else {
+        alert('Failed to delete loan application')
+      }
+    } catch (error) {
+      console.error('Error deleting loan application:', error)
+      alert('An error occurred while deleting the loan application')
+    }
+  }
 
   if (loading) {
     return (
@@ -271,29 +299,27 @@ export default function AdminDashboard() {
                                 Reject
                               </button>
                             
-                             <button
-                                onClick={() => updateLoanStatus(loan.id, 'repaid')}
-                                className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition"
-                              >
-                                Repaid
-                              </button>
+                            
 
 
                             </div>
                           </div>
                         )}
                         {loan.status !== 'pending' && (
-                          <div className="flex flex-col space-y-2">
+                          <div className="flex flex-col space-y-2 justify-center items-center">
                             <button
                               onClick={() => {
                                 setSelectedLoan(loan)
                                 fetchUserDocuments(loan.userId)
                               }}
-                              className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition"
+                              className="bg-blue-600  text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition"
                             >
-                              View Documents
+                              View Docs
                             </button>
                             <span className="text-gray-500 text-sm">Reviewed</span>
+                            <button onClick={() => deleteLoan(loan.id)} className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition">
+                              delete loan
+                            </button>
                           </div>
                         )}
                       </td>

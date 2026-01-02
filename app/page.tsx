@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { GraduationCap, Wallet, Zap } from 'lucide-react'
+import TextType from '@/components/TextType'
 
 export const metadata: Metadata = {
   title: 'Home - Secure Fund | Student Loan Platform for Ghanaian Students',
@@ -16,14 +17,25 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold mb-6">
-              Secure Fund - Your Path to Education
+              Secure Fund - 
+               <span className=' p-3 shadow-lg'>
+              <TextType text={['Accessible Loans','Made Easy','For Students']}
+                typingSpeed={100}
+                deletingSpeed={50}
+                pauseDuration={2000}
+                loop={true}
+               textColors={['#1E40AF']}
+               cursorClassName='text-blue-600'
+               cursorBlinkDuration={.6}
+              />
+              </span>
             </h1>
             <p className="text-lg md:text-xl mb-8 ">
               Empowering Ghanaian students with accessible educational loans
             </p>
             <Link
               href="/apply"
-              className="bg-slate-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-slate-700 transition duration-300 inline-block"
+              className="bg-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-blue-700 transition duration-300 inline-block"
             >
               Apply for Loan
             </Link>
@@ -40,7 +52,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="bg-primary-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center">
               <div className="mb-4 flex justify-center">
-                <GraduationCap className="w-12 h-12 text-primary-600" />
+                <GraduationCap className="w-12 h-12 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-800">
                 Easy Application
@@ -51,7 +63,7 @@ export default function Home() {
             </div>
             <div className="bg-primary-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center">
               <div className="mb-4 flex justify-center">
-                <Wallet className="w-12 h-12 text-primary-600" />
+                <Wallet className="w-12 h-12 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-800">
                 Flexible Repayment
@@ -62,7 +74,7 @@ export default function Home() {
             </div>
             <div className="bg-primary-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center">
               <div className="mb-4 flex justify-center">
-                <Zap className="w-12 h-12 text-primary-600" />
+                <Zap className="w-12 h-12 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-800">
                 Lower Interest Rates
@@ -86,7 +98,7 @@ export default function Home() {
           </p>
           <Link
             href="/apply"
-            className="bg-slate-600 hover:bg-slate-700 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg  transition duration-300 inline-block"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg  transition duration-300 inline-block"
           >
             Apply Now
           </Link>

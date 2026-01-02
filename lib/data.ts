@@ -179,4 +179,15 @@ export async function getLoansByUserId(userId: string): Promise<Loan[]> {
   }
 }
 
+export async function deleteLoanById(loanId: string): Promise<boolean> {
+  try {
+    await connectDB()
+    const result = await Loan.findByIdAndDelete(loanId)
+    return !!result
+  } catch (error) {
+    console.error('Error deleting loan:', error)
+    return false
+  }
+}
+
 

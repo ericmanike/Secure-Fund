@@ -4,6 +4,8 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { AuthProvider } from '@/lib/authContext'
+import Link from 'next/link'
+import { Phone } from 'lucide-react'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -50,6 +52,8 @@ export default function RootLayout({
         <main className="min-h-screen flex flex-col">
           {children}
         </main>
+              <Link href={'/contact'}>  <button className="fixed bottom-8 right-8 bg-blue-600 text-white transition-all duration-600 
+              md:py-3 px-4 py-2 rounded-[15px]  shadow-lg hover:bg-blue-700  flex items-center gap-2 font-bold"> Contact us Here <Phone className='rotate-[260deg]'/></button></Link>
         <Footer />
         </AuthProvider>
       </body>

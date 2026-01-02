@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-
+import AccordionUsage from '../../components/Accordion';
 
 export const metadata: Metadata = {
   title: 'About Us - Secure Fund | Student Loan Platform',
@@ -15,8 +15,8 @@ export default function About() {
           About Secure Fund
         </h1>
      
-        <section className="bg-slate-300 p-8 rounded-lg shadow-md mb-8">
-          <h2 className="text-2xl text-center  decoration-solid font-semibold mb-4 text-primary-600">
+        <section className=" p-8 rounded-lg shadow-lg mb-8">
+          <h2 className="text-2xl text-center  decoration-solid font-semibold mb-4 text-blue-600">
             Purpose of the Platform
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
@@ -25,71 +25,50 @@ export default function About() {
             Our platform provides accessible loan options specifically designed for students across 
             Ghana's leading universities and institutions.
           </p>
-          <p className="text-gray-700 leading-relaxed">
-            We believe that every student deserves the opportunity to pursue their academic dreams 
-            without financial worry. Our mission is to bridge the gap between ambition and 
-            opportunity, making higher education more accessible to all.
-          </p>
+        
         </section>
 
-        <section className="bg-slate-300 p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl text-center decoration-solid font-semibold mb-6 text-primary-600">
-            How the Loan Process Works
-          </h2>
-          <div className="space-y-6">
-            <div className="flex items-start">
-              <div className="flex-shrink-0 w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                1
+       
+         {/* Application Process Section */}
+        <div className="py-16 md:py-24 px-4 md:px-8" id='process'>
+          <div className="max-w-6xl mx-auto">
+            {/* Section heading */}
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-blue-600"></div>
+                <span className="text-sm uppercase tracking-widest font-semibold text-blue-600">How it works</span>
+                <div className="w-8 h-0.5 bg-gradient-to-l from-transparent to-blue-600"></div>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Application</h3>
-                <p className="text-gray-700">
-                  Fill out our simple online application form with your personal details, 
-                  school information, and loan requirements.
-                </p>
-              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900">Application Process</h2>
+              <p className="text-gray-600 mt-4 text-lg">Simple, fast, and transparent. Get your loan in three easy steps.</p>
             </div>
 
-            <div className="flex items-start">
-              <div className="flex-shrink-0 w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                2
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Review</h3>
-                <p className="text-gray-700">
-                  Our team reviews your application to ensure all requirements are met 
-                  and verify your eligibility.
-                </p>
-              </div>
-            </div>
+        
+        </div>
 
-            <div className="flex items-start">
-              <div className="flex-shrink-0 w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                3
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Approval</h3>
-                <p className="text-gray-700">
-                  Once approved, you'll receive a notification with the details of your 
-                  loan and next steps.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start">
-              <div className="flex-shrink-0 w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                4
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Repayment</h3>
-                <p className="text-gray-700">
-                  Repay your loan through our secure payment system using Paystack. 
-                  Flexible payment options available.
-                </p>
-              </div>
-            </div>
+        {/* Divider */}
+        <div className="px-4 md:px-8 py-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="h-0.5 bg-gradient-to-r from-transparent via-blue-600 to-transparent"></div>
           </div>
-        </section>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="py-16 md:py-24 px-4 md:px-8" id='faqs'>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to--600"></div>
+                <span className="text-sm uppercase tracking-widest font-semibold text-blue-600">Questions?</span>
+                <div className="w-8 h-0.5 bg-gradient-to-l from-transparent to-blue-600"></div>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900">Frequently Asked Questions</h2>
+            </div>
+            <AccordionUsage />
+          </div>
+        </div>
+        </div>
+
       </div>
     </main>
   )
