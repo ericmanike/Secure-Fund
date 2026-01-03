@@ -2,7 +2,7 @@ import connectDB from './mongodb'
 import User, { IUser } from './models/User'
 import Loan, { ILoan } from './models/Loan'
 import { User as UserType } from './auth'
-
+import jwt from 'jsonwebtoken'
 
 
 export interface Loan {
@@ -109,6 +109,36 @@ export async function getUserByEmail(email: string): Promise<UserType | undefine
   }
 }
 
+
+
+export async function updateUserPassword(userId: string | undefined, token: string, hashedPassword: string): Promise<boolean> {
+  try {
+    await connectDB()
+    
+
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
+
+   console.log('Decoded token:', decodedToken.userId , 'Provided userId:', userId);
+    if (decodedToken.userId !== userId) {
+      throw new Error('Invalid token for the specified user');
+    }
+
+    const result = await User.findByIdAndUpdate(
+      userId,
+      { password: hashedPassword, resetPasswordToken: null },
+      { new: true }
+    )
+    return !!result
+  } catch (error) {
+    console.error('Error updating user password:', error)
+    return false
+  }
+}
+
+
+
+
+
 export async function getUserById(id: string): Promise<UserType | undefined> {
   try {
     await connectDB()
@@ -119,6 +149,7 @@ export async function getUserById(id: string): Promise<UserType | undefined> {
     return undefined
   }
 }
+
 
 export async function getLoans(): Promise<Loan[]> {
   try {

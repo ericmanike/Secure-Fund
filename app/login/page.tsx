@@ -1,9 +1,11 @@
-'use client'
+"use client"
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import ResetRequestModal from '../../components/ResetRequestModal'
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -15,6 +17,8 @@ const validationSchema = Yup.object({
 
 export default function Login() {
   const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleSubmit = async (values: any, { setSubmitting, setFieldError }: any) => {
     try {
@@ -74,7 +78,7 @@ export default function Login() {
                   type="email"
                   id="email"
                   name="email"
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                     errors.email && touched.email
                       ? 'border-red-500'
                       : 'border-gray-700'
@@ -88,24 +92,42 @@ export default function Login() {
                 <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
                   Password <span className="text-red-500">*</span>
                 </label>
-                <Field
-                  type="password"
-                  id="password"
-                  name="password"
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
-                    errors.password && touched.password
-                      ? 'border-red-500'
-                      : 'border-gray-700'
-                  }`}
-                  placeholder="Enter your password"
-                />
+                <Field name="password">
+                  {({ field }: any) => (
+                    <div className="relative">
+                      <input
+                        {...field}
+                        type={showPassword ? 'text' : 'password'}
+                        id="password"
+                        placeholder="Enter your password"
+                        className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                          errors.password && touched.password
+                            ? 'border-red-500'
+                            : 'border-gray-700'
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((s) => !s)}
+                        className="absolute right-3 top-3 text-sm text-gray-300"
+                      >
+                        {showPassword ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                  )}
+                </Field>
                 <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+                <div className="mt-2 text-right">
+                  <button type="button" onClick={() => setIsModalOpen(true)} className="text-sm text-blue-600 hover:underline">
+                    Forgot password?
+                  </button>
+                </div>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-primary-600 text-white py-3.5 rounded-lg font-semibold hover:bg-primary-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="w-full bg-blue-600 text-white py-3.5 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center">
@@ -125,11 +147,12 @@ export default function Login() {
 
         <p className="mt-6 text-center text-gray-600">
           Don't have an account?{' '}
-          <Link href="/register" className="text-primary-600 hover:text-primary-700 font-semibold transition-colors">
+          <Link href="/register" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
             Register here
           </Link>
         </p>
       </div>
+      <ResetRequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </main>
   )
 }

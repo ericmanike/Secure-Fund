@@ -1,10 +1,11 @@
-'use client'
+"use client"
 
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useState } from 'react'
+import ResetRequestModal from '../../components/ResetRequestModal'
 
 const validationSchema = Yup.object({
   fullName: Yup.string()
@@ -53,6 +54,9 @@ export default function Register() {
   const [ghanaCardPreview, setGhanaCardPreview] = useState<string | null>(null)
   const [studentIdPreview, setStudentIdPreview] = useState<string | null>(null)
   const [uploadProgress, setUploadProgress] = useState({ ghanaCard: false, studentId: false })
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'ghanaCard' | 'studentId', setPreview: (url: string | null) => void) => {
     const file = e.target.files?.[0]
@@ -173,7 +177,7 @@ export default function Register() {
                   type="text"
                   id="fullName"
                   name="fullName"
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                     errors.fullName && touched.fullName
                       ? 'border-red-500'
                       : 'border-gray-700'
@@ -191,7 +195,7 @@ export default function Register() {
                   type="email"
                   id="email"
                   name="email"
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                     errors.email && touched.email
                       ? 'border-red-500'
                       : 'border-gray-700'
@@ -209,7 +213,7 @@ export default function Register() {
                   type="text"
                   id="ghanaCard"
                   name="ghanaCard"
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                     errors.ghanaCard && touched.ghanaCard
                       ? 'border-red-500'
                       : 'border-gray-700'
@@ -228,7 +232,7 @@ export default function Register() {
                   type="text"
                   id="studentId"
                   name="studentId"
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
                     errors.studentId && touched.studentId
                       ? 'border-red-500'
                       : 'border-gray-700'
@@ -254,7 +258,7 @@ export default function Register() {
                       handleFileChange(e, 'ghanaCard', setGhanaCardPreview)
                     }
                   }}
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-700 ${
+                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 cursor-pointer file:text-white hover:file:bg-blue-700 ${
                     errors.ghanaCardImage && touched.ghanaCardImage
                       ? 'border-red-500'
                       : 'border-gray-700'
@@ -293,7 +297,7 @@ export default function Register() {
                       handleFileChange(e, 'studentId', setStudentIdPreview)
                     }
                   }}
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-700 ${
+                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold cursor-pointer file:bg-blue-600 file:text-white hover:file:bg-blue-700 ${
                     errors.studentIdImage && touched.studentIdImage
                       ? 'border-red-500'
                       : 'border-gray-700'
@@ -320,17 +324,26 @@ export default function Register() {
                 <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
                   Password <span className="text-red-500">*</span>
                 </label>
-                <Field
-                  type="password"
-                  id="password"
-                  name="password"
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
-                    errors.password && touched.password
-                      ? 'border-red-500'
-                      : 'border-gray-700'
-                  }`}
-                  placeholder="At least 6 characters"
-                />
+                <Field name="password">
+                  {({ field }: any) => (
+                    <div className="relative">
+                      <input
+                        {...field}
+                        type={showPassword ? 'text' : 'password'}
+                        id="password"
+                        placeholder="At least 6 characters"
+                        className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                          errors.password && touched.password
+                            ? 'border-red-500'
+                            : 'border-gray-700'
+                        }`}
+                      />
+                      <button type="button" onClick={() => setShowPassword(s => !s)} className="absolute right-3 top-3 text-sm text-gray-300">
+                        {showPassword ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                  )}
+                </Field>
                 <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
               </div>
 
@@ -338,24 +351,33 @@ export default function Register() {
                 <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
                   Confirm Password <span className="text-red-500">*</span>
                 </label>
-                <Field
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
-                    errors.confirmPassword && touched.confirmPassword
-                      ? 'border-red-500'
-                      : 'border-gray-700'
-                  }`}
-                  placeholder="Confirm your password"
-                />
+                <Field name="confirmPassword">
+                  {({ field }: any) => (
+                    <div className="relative">
+                      <input
+                        {...field}
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                        className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                          errors.confirmPassword && touched.confirmPassword
+                            ? 'border-red-500'
+                            : 'border-gray-700'
+                        }`}
+                      />
+                      <button type="button" onClick={() => setShowConfirmPassword(s => !s)} className="absolute right-3 top-3 text-sm text-gray-300">
+                        {showConfirmPassword ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                  )}
+                </Field>
                 <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-primary-600 text-white py-3.5 rounded-lg font-semibold hover:bg-primary-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="w-full bg-blue-600 text-white py-3.5 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center">
@@ -372,13 +394,13 @@ export default function Register() {
             </Form>
           )}
         </Formik>
-
         <p className="mt-6 text-center text-gray-600">
           Already have an account?{' '}
-          <Link href="/login" className="text-primary-600 hover:text-primary-700 font-semibold transition-colors">
+          <Link href="/login" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
             Login here
           </Link>
         </p>
+      <ResetRequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
     </main>
   )

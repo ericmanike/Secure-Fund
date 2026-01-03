@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
+const JWT_SECRET = process.env.JWT_SECRET!
 
 export interface User {
   id: string
@@ -26,6 +26,8 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 export function generateToken(userId: string, role: string): string {
   return jwt.sign({ userId, role }, JWT_SECRET, { expiresIn: '7d' })
 }
+
+
 
 export function verifyToken(token: string): { userId: string; role: string } | null {
   try {
