@@ -8,6 +8,7 @@ interface Loan {
   loanAmount: number
   fullName: string
   email: string
+  loanType: number
 }
 
 declare global {
@@ -35,6 +36,7 @@ export default function RepayLoan() {
   const [loan, setLoan] = useState<Loan | null>(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [amountToPay, setAmountToPay] = useState<number | null>(null)
 
   useEffect(() => {
     // Check for role cookie since token is httpOnly
@@ -70,6 +72,7 @@ useEffect(() => {
         const foundLoan = data.loans.find((l: Loan) => l.id === loanId)
         if (foundLoan && foundLoan.status === 'approved') {
           setLoan(foundLoan)
+          setAmountToPay(foundLoan.loanAmount + (foundLoan.loanType/100)*foundLoan.loanAmount)
         } else {
           router.push('/dashboard')
         }
@@ -105,11 +108,12 @@ useEffect(() => {
         return
       }
       
+      const Amount = loan.loanAmount + (loan.loanType/100)*loan.loanAmount
       const handler = window.PaystackPop.setup({
         key: paystackKey,
         email: loan.email,
         currency: 'GHS',
-        amount: parseFloat(loan.loanAmount.toString()) * 100, // Convert to kobo
+        amount: parseFloat(Amount.toString()) * 100, // Convert to kobo
         
         ref: reference,
         onClose: () => {
@@ -177,7 +181,9 @@ useEffect(() => {
             <div>
               <h2 className="text-xl font-semibold mb-4 text-gray-800">Loan Details</h2>
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                <p><span className="font-semibold">Loan Amount:</span> GHS {loan.loanAmount.toLocaleString()}</p>
+                <p><span className="font-semibold"> Amount borrowed:</span> GHS {loan.loanAmount.toLocaleString()}</p>
+                <p><span className="font-semibold"> Interest on the loan:</span> {loan.loanType}%</p>
+                <p><span className="font-semibold">Total Amount to Repay:</span> GHS {(loan.loanAmount + (loan.loanType/100)*loan.loanAmount).toLocaleString()}</p>
                 <p><span className="font-semibold">Name:</span> {loan.fullName}</p>
                 <p><span className="font-semibold">Email:</span> {loan.email}</p>
               </div>
@@ -188,7 +194,7 @@ useEffect(() => {
               disabled={submitting}
               className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              {submitting ? 'Processing Payment...' : `Pay GHS ${loan.loanAmount.toLocaleString()}`}
+              {submitting ? 'Processing Payment...' : `Pay GHS ${amountToPay?.toLocaleString()}`}
             </button>
 
             <p className="text-sm text-gray-500 text-center">

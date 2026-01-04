@@ -14,6 +14,7 @@ interface Loan {
   school: string
   level: string
   loanAmount: number
+  loanType: number
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
@@ -149,10 +150,12 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="overflow-x-auto -mx-6 md:mx-0">
-              <table className="w-full min-w-[600px] md:min-w-0">
+              <table className="w-full min-w-[600px] md:min-w-0 overflow-x-auto">
                 <thead>
                   <tr className="border-b">
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Amount</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700"> Rate  </th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700"> Total amount owning </th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">School</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Level</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Date Applied</th>
@@ -164,6 +167,10 @@ export default function Dashboard() {
                   {loans.map((loan) => (
                     <tr key={loan.id} className="border-b hover:bg-gray-50">
                       <td className="py-3 px-4">GHS {loan.loanAmount.toLocaleString()}</td>
+                      <td className="py-3 px-4">{loan?.loanType}%</td>
+                      <td className="py-3 px-4"> 
+                        GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount)).toLocaleString()}
+                      </td>
                       <td className="py-3 px-4">{loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
                       <td className="py-3 px-4">

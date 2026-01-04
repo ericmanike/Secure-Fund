@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import { useToast } from './toastProvider'
 
 type Props = {
   isOpen: boolean
@@ -11,6 +12,8 @@ export default function ResetRequestModal({ isOpen, onClose }: Props) {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
+
+  const {showToast} = useToast()
 
   if (!isOpen) return null
 
@@ -27,13 +30,15 @@ export default function ResetRequestModal({ isOpen, onClose }: Props) {
       })
 
       if (res.ok) {
-        setMessage(' You will receive a reset link shortly. Check your email inbox.')
+        
+       console.log(res)
+        showToast(' Check your email inbox for a password reset link.','success')
       } else {
         const data = await res.json()
-        setMessage(data.error || 'Something went wrong')
+        showToast(data.error || 'Something went wrong','error')
       }
     } catch (err) {
-      setMessage('Network error. Please try again.')
+      showToast('Network error. Please try again.','error')
     } finally {
       setLoading(false)
     }

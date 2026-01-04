@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAuthUser } from '@/lib/middleware'
 import Loan from '@/lib/models/Loan'
 import connectDB from '@/lib/mongodb'
+import {Repayment} from '@/lib/models/Repaid'
+
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,10 +38,18 @@ export async function POST(request: NextRequest) {
     })
 
     const paystackData = await verifyResponse.json()
+     const loan = await Loan.findById(loanId)
+     const payStackAmount = Number(paystackData.data.amount / 100)
+         
+    const interest =(Number(loan!.loanType)/100)*loan!.loanAmount
+    const expectedAmount = loan!.loanAmount + interest
 
-    if (paystackData.status && paystackData.data.status === 'success') {
 
-    const loan = await Loan.findById(loanId)
+    console.log('Expected amount:', expectedAmount)
+    console.log('Paystack amount:', payStackAmount)
+    if (paystackData.status && paystackData.data.status === 'success' && paystackData.data.amount === expectedAmount * 100) {
+
+  
     console.log('Fetched loan for verification:', loan)
 
 
@@ -61,17 +71,34 @@ export async function POST(request: NextRequest) {
 
       // Payment successful - you can update loan status or create payment record here
       // For now, we'll just return success
+      const newRepayment = new Repayment({
+        userId: loan.userId,
+        fullName: loan.fullName,
+        email: loan.email,
+        phoneNumber: loan.phoneNumber,
+        loanAmount: loan.loanAmount,
+        dateApplied: loan.dateApplied,
+        paidAt: new Date(), 
+        interest: interest,
+      })
+
+     const savedrepayment = await newRepayment.save()
+    console.log('Saved repayment:', savedrepayment)
+
+
       console.log('Payment verified successfully:', paystackData.data)
       return NextResponse.json({
         message: 'Payment verified successfully',
         transaction: paystackData.data,
       })
     } else {
+      
       return NextResponse.json(
-        { error: 'Payment verification failed' },
+        { message: 'Unauthorized or invalid payment details' },
         { status: 400 }
       )
     }
+    
   } catch (error) {
     console.error('Payment verification error:', error)
     return NextResponse.json(

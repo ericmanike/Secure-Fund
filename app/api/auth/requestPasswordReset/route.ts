@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { getUserByEmail } from "@/lib/data";
 import { Resend } from 'resend';
+import { error } from "console";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
@@ -34,9 +35,11 @@ function verifyToken(token: string): { userId: string } | null {
 
     const user = await getUserByEmail(String(email).toLowerCase());
 
+
+    console.log("user you are resetting password for:", user)
     // For security, respond the same whether user exists or not.
     if (!user) {
-      return NextResponse.json({ ok: true })
+      return NextResponse.json({ error: " Please register first" });
     }
 
     const token = resetToken(user.id);

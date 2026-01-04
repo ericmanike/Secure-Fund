@@ -2,7 +2,8 @@
 import { useState } from 'react'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-import ResetSuspense from '@/components/resetSuspense'
+import { useToast } from './toastProvider'
+
 
 import { ArrowLeft, Eye, EyeOff} from 'lucide-react'
  import { useSearchParams,useRouter} from 'next/navigation'
@@ -28,7 +29,7 @@ export default function ResetPasswordForm() {
   const searchParams = useSearchParams()
   const email = searchParams.get('email') || ''
   const token = searchParams.get('token') || ''
-  const [message, setMessage] = useState<string | null>(null);
+const {showToast} = useToast()
 
 
 
@@ -55,12 +56,12 @@ export default function ResetPasswordForm() {
       }
       
       const data = await res.json()
-      setMessage(data.message || "Password reset successful");
+      showToast(data.message || "Password reset successful", "success");
       console.log('Password reset successful:', data)
   
       Router.replace('/login')
     } catch (err: any) {
-
+      showToast(err.message || 'An error occurred', 'error');
       console.error(err)
     }finally {
       setIsSending(false);
@@ -68,7 +69,6 @@ export default function ResetPasswordForm() {
   }
 
   return (
-    <ResetSuspense>
     <div className="h-screen flex justify-center items-center  p-10 m-auto  md:w-1/2">
    
       
@@ -127,12 +127,11 @@ export default function ResetPasswordForm() {
                 {isSending ? 'Reseting...' : 'Reset Password'} 
               </button>
 
-                {message && <p className="text-center text-red-500">{message}</p>}
             </Form>
           )}
         </Formik>
       )}
     </div>
-    </ResetSuspense>
+  
   )
 }

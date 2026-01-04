@@ -13,6 +13,7 @@ interface Loan {
   school: string
   level: string
   loanAmount: number
+  loanType: number
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
@@ -247,6 +248,8 @@ const [confirmstate, setConfirmstate] = useState(false);
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">School</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Level</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Amount</th>
+                     <th className="text-left py-3 px-4 font-semibold text-gray-700"> Rate  </th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-700">Total to repay</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Reason</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Date Applied</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
@@ -262,6 +265,10 @@ const [confirmstate, setConfirmstate] = useState(false);
                       <td className="py-3 px-4">{loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
                       <td className="py-3 px-4">GHS {loan.loanAmount.toLocaleString()}</td>
+                      <td className="py-3 px-4">{loan?.loanType}%</td>
+                      <td className="py-3 px-4"> 
+                        GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount)).toLocaleString()}
+                      </td>
                       <td className="py-3 px-4 max-w-xs truncate" title={loan.reason}>
                         {loan.reason}
                       </td>

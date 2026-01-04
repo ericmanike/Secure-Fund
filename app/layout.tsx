@@ -6,6 +6,8 @@ import Footer from '@/components/Footer'
 import { AuthProvider } from '@/lib/authContext'
 import Link from 'next/link'
 import { Phone } from 'lucide-react'
+import { ToastProvider } from '@/components/toastProvider'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -47,6 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ToastProvider>
         <AuthProvider>
         <Navbar />
         <main className="min-h-screen flex flex-col">
@@ -56,6 +59,7 @@ export default function RootLayout({
               md:py-3 px-4 py-2 rounded-[15px]  shadow-lg hover:bg-blue-700  flex items-center gap-2 font-bold"> Contact us Here <Phone className='rotate-[260deg]'/></button></Link>
         <Footer />
         </AuthProvider>
+      </ToastProvider>
       </body>
     </html>
   )
