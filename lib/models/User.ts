@@ -36,11 +36,13 @@ const UserSchema: Schema = new Schema(
       type: String,
       unique: true,
       trim: true,
+      sparse: true,
     },
     studentId: {
       type: String,
       unique: true,
       trim: true,
+      sparse: true,
     },
     ghanaCardImage: {
       type: String,

@@ -34,7 +34,7 @@ const validationSchema = Yup.object({
     .max(1000, 'Maximum loan amount is GHS 1,000')
     .required('Loan amount is required')
     .typeError('Loan amount must be a number'),
-  loanType:Yup.string().oneOf(['9','11']).required('Please select a loan type'),
+  loanType:Yup.string().oneOf(['7','9','11']).required('Please select a loan type'),
   scholarStatus: Yup.string()
     .oneOf(['yes', 'no'], 'Please select a valid status')
     .required('Scholar status is required'),
@@ -43,9 +43,15 @@ const validationSchema = Yup.object({
   return scholarStatus === 'yes' 
     ? schema.required('Required')
     : schema.strip();
+
 }).oneOf([ '8','9', 
   '10', '11', '12'], 
   'Please select a valid cohort'),
+  collateral:Yup.string().when('scholarStatus', ([scholarStatus], schema) => {
+  return scholarStatus === 'no' 
+    ? schema.required('Required')
+    : schema.strip();
+}),
 
   reason: Yup.string()
     .min(10, 'Reason must be at least 10 characters')
@@ -134,7 +140,8 @@ export default function Apply() {
           level: values.level,
           loanAmount: values.loanAmount,
           scholar: values.scholarStatus,
-          cohort: values.cohort || 'N/A',
+          cohort: values.cohort || '',
+          collateral: values.collateral || '',
           loanType: values.loanType,
           reason: values.reason,
         }),
@@ -177,6 +184,7 @@ export default function Apply() {
 
         <Formik
           initialValues={{
+
             fullName: '',
             email: '',
             phoneNumber: '',
@@ -184,6 +192,7 @@ export default function Apply() {
             level: '',
             scholarStatus: '',
             cohort: '',
+            collateral: '',
             loanType: '',
             loanAmount: '',
             reason: '',
@@ -191,9 +200,7 @@ export default function Apply() {
           validationSchema={validationSchema}
           
           onSubmit={
-    
               handleSubmit
-        
           }
         >
           {({ isSubmitting, errors, touched, status,values }) => (
@@ -315,6 +322,7 @@ export default function Apply() {
                     }`}
                   >
                     <option value="" className="bg-gray-800">Select your loan type</option>
+                    <option value={7} className="bg-gray-800">one weeks - 7% interest rate</option>
                     <option value={9} className="bg-gray-800">Two weeks - 9% interest rate</option>
                     <option value={11} className="bg-gray-800">One month - 11% interest rate</option>
                   </Field>
@@ -367,7 +375,35 @@ export default function Apply() {
                   </Field>
                   <ErrorMessage name="cohort" component="div" className="text-red-500 text-sm mt-1" />
                 </div>)
-}
+}             
+
+
+
+
+
+            {values.scholarStatus ==='no' &&( 
+              <div>
+                  <label htmlFor="collateral" className="block text-sm font-semibold text-gray-700 mb-2">
+                    What is you collateral . eg Laptop, Phone,Fridge etc. <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    as="textarea"
+                    id="collateral"
+                    name="collateral"
+                    rows={3}
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 resize-none ${
+                      errors.collateral && touched.collateral
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                    placeholder="Please describe your collateral..."
+                  />
+                  <ErrorMessage name="collateral" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+
+
+            )}
 
 
               {/* Loan Amount and Reason Fields */}

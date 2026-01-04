@@ -10,6 +10,7 @@ export interface ILoan extends Document {
   loanAmount: number
   scholar: string
   cohort: string
+  collateral: string
   loanType: Number
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
@@ -66,6 +67,12 @@ const LoanSchema: Schema = new Schema(
       trim: true,
         
     },
+
+    collateral: {
+      type: String,
+      trim: true,
+    },
+
     loanType: {
       type: Number,
       required: true,

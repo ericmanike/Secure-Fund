@@ -15,11 +15,11 @@ export async function POST(request: NextRequest) {
 
     const userId = user.userId
 
-    const { fullName, email, phoneNumber, school, level, loanAmount,scholar, cohort, loanType, reason } = await request.json()
+    const { fullName, email, phoneNumber, school, level, loanAmount,scholar, cohort,collateral, loanType, reason } = await request.json()
 
-    if (!fullName || !email || !phoneNumber || !school || !level || !loanAmount || !reason || !scholar || !cohort || !loanType) {
-      console.log('Missing fields:', { fullName, email, phoneNumber, school, level, loanAmount, reason,scholar,cohort,loanType })
-      return NextResponse.json(
+    if (!fullName || !email || !phoneNumber || !school || !level || !loanAmount || !reason || !scholar || !loanType) {
+      console.log('Missing fields:', { fullName, email, phoneNumber, school, level, loanAmount, reason,scholar,loanType })
+      return NextResponse.json(  
         { error: 'All fields are required' },
         { status: 400 }
       )
@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
       loanAmount: parseFloat(loanAmount),
       scholar,
       cohort,
+      collateral,
       loanType,
       reason,
       status: 'pending' as const,

@@ -15,6 +15,7 @@ export interface Loan {
   level: string
   loanAmount: number
   scholar: string
+  collateral: string
   cohort: string
   loanType: Number
   reason: string
@@ -52,6 +53,7 @@ function convertLoan(loan: ILoan): Loan {
     loanAmount: loan.loanAmount,
     scholar: loan.scholar,
     cohort: loan.cohort,
+    collateral: loan.collateral,
     loanType: loan.loanType,
     reason: loan.reason,
     status: loan.status,
@@ -175,6 +177,7 @@ export async function saveLoan(loan: Omit<Loan, 'id'>): Promise<string> {
       loanAmount: loan.loanAmount,
       scholar: loan.scholar,
       cohort: loan.cohort,
+      collateral: loan.collateral,
       loanType: loan.loanType,
       reason: loan.reason,
       status: loan.status,

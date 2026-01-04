@@ -14,6 +14,9 @@ interface Loan {
   level: string
   loanAmount: number
   loanType: number
+  scholar: string
+  cohort: string
+  collateral: string
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
@@ -59,11 +62,14 @@ const [confirmstate, setConfirmstate] = useState(false);
       const response = await fetch('/api/loans')
       if (response.ok) {
         const data = await response.json()
+        console.log('Loans data received:', data.loans)
         setLoans(data.loans)
       }
+
     } catch (error) {
       console.error('Error fetching loans:', error)
     } finally {
+      console.log(loans)
       setLoading(false)
     }
   }
@@ -249,11 +255,15 @@ const [confirmstate, setConfirmstate] = useState(false);
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Level</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Amount</th>
                      <th className="text-left py-3 px-4 font-semibold text-gray-700"> Rate  </th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-700">Total to repay</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Total to repay</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Reason</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Date Applied</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700"  colSpan={10}>Collateral</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Scholar?</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Cohort</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
+
                   </tr>
                 </thead>
                 <tbody>
@@ -267,7 +277,7 @@ const [confirmstate, setConfirmstate] = useState(false);
                       <td className="py-3 px-4">GHS {loan.loanAmount.toLocaleString()}</td>
                       <td className="py-3 px-4">{loan?.loanType}%</td>
                       <td className="py-3 px-4"> 
-                        GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount)).toLocaleString()}
+                      GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount)).toLocaleString()}
                       </td>
                       <td className="py-3 px-4 max-w-xs truncate" title={loan.reason}>
                         {loan.reason}
@@ -280,6 +290,9 @@ const [confirmstate, setConfirmstate] = useState(false);
                           {loan.status.charAt(0).toUpperCase() + loan.status.slice(1)}
                         </span>
                       </td>
+                      <td className="py-3 px-4"  colSpan={10}>{loan.collateral || 'N/A'}</td>
+                      <td className="py-3 px-4">  {loan.scholar}   </td>
+                      <td className="py-3 px-4">  {loan.cohort  || 'N/A'}   </td>
                       <td className="py-3 px-4">
                         {loan.status === 'pending' && (
                           <div className="flex flex-col space-y-2">
