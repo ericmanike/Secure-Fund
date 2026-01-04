@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-2xl font-bold mb-4 text-blue-600">Secure Fund</h3>
+            <h3 className="text-2xl font-bold mb-4 text-blue-600">Nyamekye Loans</h3>
             <p className="text-gray-400 mb-4">
               Empowering Ghanaian students with accessible educational loans. 
               Making higher education possible for everyone.
@@ -118,10 +118,10 @@ export default function Footer() {
               <li className="flex items-start">
                 <Mail className="w-5 h-5 mr-3 text-blue-600 flex-shrink-0 mt-0.5" />
                 <a
-                  href="mailto:info@securefund.gh"
+                  href="mailto:nyamekyejoshua1720@gmail.com"
                   className="text-gray-400 hover:text-blue-600 transition-colors"
                 >
-                  info@securefund.gh
+                 nyamekyejoshua1720@gmail.com
                 </a>
               </li>
               <li className="flex items-start">

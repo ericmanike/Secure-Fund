@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useToast } from '@/components/toastProvider';
 
 function ContactPage() {
 
@@ -22,6 +23,8 @@ triggerOnce:true
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  const {showToast} = useToast();
+
   const validate = () => {
     let tempErrors: { [key: string]: string } = {};
     if (!formData.name) tempErrors.name = 'Name is required';
@@ -40,11 +43,31 @@ triggerOnce:true
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit =  async (e:any) => {
     e.preventDefault();
     if (validate()) {
-      alert('Form submitted successfully!');
-      setFormData({ name: '', email: '', message: '' });
+
+      try{ 
+
+        const res = fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+
+        })
+
+        console.log('Form submitted successfully:', res);
+        showToast('Form submitted successfully!');
+      }catch(err){
+        showToast('Error submitting form.try again later.', 'error');
+        console.log('Form submission error:', err);
+      }finally{
+            setFormData({ name: '', email: '', message: '' });
+      }
+
+    
     }
   };
 
@@ -96,7 +119,9 @@ triggerOnce:true
           <button 
           ref={Submit}
             type="submit"
-            className={`w-full bg-[#191097] text-white font-semibold py-2 rounded-lg hover:bg-[#0b3eb4] transition-all duration-1000 ${sinView ?'translate-y-0 opacity-100':'translate-y-[1npm r0px] opacity-0 '}`}
+            className={`w-full bg-[#191097] text-white font-semibold py-2 rounded-lg hover:bg-[#0b3eb4] transition-all duration-1000
+               ${sinView ?'translate-y-0 opacity-100':'translate-y-[1npm r0px] opacity-0 '}`}
+          onClick={ (e) => handleSubmit(e)}
           >
             Send Message
           </button>

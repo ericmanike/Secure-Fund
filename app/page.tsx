@@ -17,7 +17,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold mb-6">
-              Secure Fund - 
+              Nyamekye Loans- 
                <span className=' p-3 shadow-lg'>
               <TextType text={['Accessible Loans','Made Easy','For Students']}
                 typingSpeed={100}
@@ -31,7 +31,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-lg md:text-xl mb-8 ">
-              Empowering Ghanaian students with accessible educational loans
+              Empowering  students with accessible educational loans
             </p>
             <Link
               href="/apply"

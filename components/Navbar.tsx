@@ -65,7 +65,7 @@ export default function Navbar() {
               <Shield className="w-6 h-6 text-white" />
             </div>
             <span className="text-xl md:text-2xl font-bold text-white group-hover:text-blue-600 transition-colors">
-              Secure Fund
+              Nyamekye Loans
             </span>
           </Link>
 
