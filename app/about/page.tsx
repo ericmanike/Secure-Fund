@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import AccordionUsage from '../../components/Accordion';
 
 export const metadata: Metadata = {
-  title: 'About Us - Secure Fund | Student Loan Platform',
-  description: 'Learn about Secure Fund, our mission to support Ghanaian students, and how our loan process works. Making higher education accessible to all.',
-  keywords: 'about secure fund, student loans Ghana, education funding, loan process',
+  title: 'About Us - NyameKye Loans | Student Loan Platform',
+  description: 'Learn NyameKye Loans, our mission to support Ghanaian students, and how our loan process works. Making higher education accessible to all.',
+  keywords: 'about nyamekye loans, student loans Ghana, education funding, loan process',
 }
 
 export default function About() {

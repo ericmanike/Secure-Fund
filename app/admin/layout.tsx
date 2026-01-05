@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Admin Dashboard - Secure Fund | Loan Management',
+  title: 'Admin Dashboard - NyameKye Loans | Loan Management',
   description: 'Admin dashboard for managing loan applications, approving or rejecting student loan requests.',
   keywords: 'admin dashboard, loan management, approve loans, admin panel',
 }
