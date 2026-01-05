@@ -16,23 +16,23 @@ export const metadata: Metadata = {
     (process.env.NODE_ENV === 'production' ? 'https://securefund.gh' : 'http://localhost:3000')
   ),
   title: {
-    default: 'Secure Fund - Student Loan Platform for Ghanaian Students',
-    template: '%s | Secure Fund',
+    default: 'Nyamekye Loans - Student Loan Platform for Ghanaian Students',
+    template: '%s | Nyamekye Loans',
   },
   description: 'Empowering Ghanaian students with accessible educational loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
   keywords: ['student loans', 'Ghana', 'education loans', 'KNUST', 'UG', 'UCC', 'university loans', 'student funding'],
-  authors: [{ name: 'Secure Fund' }],
+  authors: [{ name: 'Nyamekye Loans' }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Secure Fund',
-    title: 'Secure Fund - Student Loan Platform for Ghanaian Students',
+    siteName: 'Nyamekye Loans',
+    title: 'Nyamekye Loans - Student Loan Platform for Ghanaian Students',
     description: 'Empowering Ghanaian students with accessible educational loans',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Secure Fund - Student Loan Platform',
+    title: 'Nyamekye Loans - Student Loan Platform',
     description: 'Empowering Ghanaian students with accessible educational loans',
   },
   robots: {

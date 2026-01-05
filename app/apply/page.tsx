@@ -208,7 +208,7 @@ export default function Apply() {
               <div className="space-y-6">
                 <div>
                   <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Full Name <span className="text-red-500">*</span>
+                    Momo Name <span className="text-red-500">*</span>
                   </label>
                   <Field
                     type="text"
@@ -223,6 +223,29 @@ export default function Apply() {
                   />
                   <ErrorMessage name="fullName" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
+
+                
+
+                <div>
+                  <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-700 mb-2">
+                   Momo Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                      errors.phoneNumber && touched.phoneNumber
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                    placeholder="+233 XX XXX XXXX or 0XX XXX XXXX"
+                  />
+                  <ErrorMessage name="phoneNumber" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+
+
 
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -240,24 +263,6 @@ export default function Apply() {
                     placeholder="your.email@example.com"
                   />
                   <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
-                </div>
-
-                <div>
-                  <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Phone Number <span className="text-red-500">*</span>
-                  </label>
-                  <Field
-                    type="tel"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
-                      errors.phoneNumber && touched.phoneNumber
-                        ? 'border-red-500'
-                        : 'border-gray-700'
-                    }`}
-                    placeholder="+233 XX XXX XXXX or 0XX XXX XXXX"
-                  />
-                  <ErrorMessage name="phoneNumber" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
 
                 <div>
