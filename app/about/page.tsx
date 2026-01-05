@@ -12,7 +12,7 @@ export default function About() {
     <main className="min-h-screen py-16 bg-gray-50">
       <div className="container mx-auto px-4 max-w-4xl">
         <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
-          About Secure Fund
+          About NyameKye Loans
         </h1>
      
         <section className=" p-8 rounded-lg shadow-lg mb-8">
@@ -20,7 +20,7 @@ export default function About() {
             Purpose of the Platform
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Secure Fund is dedicated to supporting Ghanaian students in their educational journey. 
+            Nyamekye Loans is dedicated to supporting Ghanaian students in their educational journey. 
             We understand that financial constraints should not be a barrier to quality education. 
             Our platform provides accessible loan options specifically designed for students across 
             Ghana's leading universities and institutions.
@@ -58,7 +58,7 @@ export default function About() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center gap-2 mb-4">
-                <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to--600"></div>
+                <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-blue-600"></div>
                 <span className="text-sm uppercase tracking-widest font-semibold text-blue-600">Questions?</span>
                 <div className="w-8 h-0.5 bg-gradient-to-l from-transparent to-blue-600"></div>
               </div>
