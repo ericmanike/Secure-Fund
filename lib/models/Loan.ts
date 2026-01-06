@@ -6,6 +6,7 @@ export interface ILoan extends Document {
   email: string
   phoneNumber: string
   school: string
+  otherSchool: string
   level: string
   loanAmount: number
   scholar: string
@@ -48,6 +49,12 @@ const LoanSchema: Schema = new Schema(
       required: true,
       trim: true,
     },
+    otherSchool: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     level: {
       type: String,
       required: true,
@@ -78,7 +85,6 @@ const LoanSchema: Schema = new Schema(
       required: true,
      
     },
-
     reason: {
       type: String,
       required: true,

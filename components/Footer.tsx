@@ -12,8 +12,8 @@ export default function Footer() {
           <div>
             <h3 className="text-2xl font-bold mb-4 text-blue-600">Nyamekye Loans</h3>
             <p className="text-gray-400 mb-4">
-              Empowering Ghanaian students with accessible educational loans. 
-              Making higher education possible for everyone.
+              Empowering students with accessible short term loans. 
+               At lower interest rates.
             </p>
             <div className="flex space-x-4">
               <a

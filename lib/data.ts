@@ -12,6 +12,7 @@ export interface Loan {
   email: string
   phoneNumber: string
   school: string
+  otherSchool: string
   level: string
   loanAmount: number
   scholar: string
@@ -49,6 +50,7 @@ function convertLoan(loan: ILoan): Loan {
     email: loan.email,
     phoneNumber: loan.phoneNumber,
     school: loan.school,
+    otherSchool: loan.otherSchool,
     level: loan.level,
     loanAmount: loan.loanAmount,
     scholar: loan.scholar,
@@ -173,6 +175,7 @@ export async function saveLoan(loan: Omit<Loan, 'id'>): Promise<string> {
       email: loan.email,
       phoneNumber: loan.phoneNumber,
       school: loan.school,
+      otherSchool: loan.otherSchool,
       level: loan.level,
       loanAmount: loan.loanAmount,
       scholar: loan.scholar,

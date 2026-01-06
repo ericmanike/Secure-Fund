@@ -11,6 +11,7 @@ interface Loan {
   email: string
   phoneNumber: string
   school: string
+  otherSchool: string
   level: string
   loanAmount: number
   loanType: number
@@ -272,7 +273,7 @@ const [confirmstate, setConfirmstate] = useState(false);
                       <td className="py-3 px-4">{loan.fullName}</td>
                       <td className="py-3 px-4">{loan.email}</td>
                       <td className="py-3 px-4">{loan.phoneNumber}</td>
-                      <td className="py-3 px-4">{loan.school}</td>
+                      <td className="py-3 px-4">{loan.school =='Other' ? loan.otherSchool : loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
                       <td className="py-3 px-4">GHS {loan.loanAmount.toLocaleString()}</td>
                       <td className="py-3 px-4">{loan?.loanType}%</td>
@@ -292,7 +293,7 @@ const [confirmstate, setConfirmstate] = useState(false);
                       </td>
                       <td className="py-3 px-4"  colSpan={10}>{loan.collateral || 'N/A'}</td>
                       <td className="py-3 px-4">  {loan.scholar}   </td>
-                      <td className="py-3 px-4">  {loan.cohort  || 'N/A'}   </td>
+                      <td className="py-3 px-4">  {loan.scholar === 'yes' ? loan.cohort :'N/A'}   </td>
                       <td className="py-3 px-4">
                         {loan.status === 'pending' && (
                           <div className="flex flex-col space-y-2">

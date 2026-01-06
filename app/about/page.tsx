@@ -67,6 +67,50 @@ export default function About() {
             <AccordionUsage />
           </div>
         </div>
+
+
+        {/*terms of service*/}
+           <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+          Privacy Policy & Terms of Service
+        </h1>
+        <section className=" p-8 rounded-lg shadow-lg mb-8">
+          <h2 className="text-2xl text-center  decoration-solid font-semibold mb-4 text-blue-600" id='#terms'>
+            Terms of Service
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            By using Nyamekye Loans, you agree to our terms of service. You agree to provide accurate information during the
+             application process and to use the loan funds for educational purposes only. 
+             Failure to comply with these terms may result in penalties, including legal action.
+
+          </p>
+        
+        </section>
+
+         <div className="px-4 md:px-8 py-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="h-0.5 bg-gradient-to-r from-transparent via-blue-600 to-transparent"></div>
+          </div>
+        </div>
+
+
+        <section className=" p-8 my-10 rounded-lg shadow-lg mb-8">
+          <h2 className="text-2xl text-center  decoration-solid font-semibold mb-4 text-blue-600" id='#terms'>
+            Privacy Policy
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Nyamekye Loans is dedicated to supporting Ghanaian students in their educational journey. 
+            We understand that financial constraints should not be a barrier to quality education. 
+            Our platform provides accessible loan options specifically designed for students across 
+            Ghana's leading universities and institutions.
+          </p>
+        
+        </section>
+
+
+
+
+
+
         </div>
 
       </div>

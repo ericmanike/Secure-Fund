@@ -4,8 +4,8 @@ import { GraduationCap, Wallet, Zap } from 'lucide-react'
 import TextType from '@/components/TextType'
 
 export const metadata: Metadata = {
-  title: 'Home - Secure Fund | Student Loan Platform for Ghanaian Students',
-  description: 'Empowering Ghanaian students with accessible educational loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
+  title: 'Home - Nyamekye Loans | Student Loan Platform for  Students',
+  description: 'Empowering  students with accessible educational loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
   keywords: 'student loans, Ghana, education loans, KNUST, UG, UCC, university loans',
 }
 

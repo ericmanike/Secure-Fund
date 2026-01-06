@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     const userId = user.userId
 
-    const { fullName, email, phoneNumber, school, level, loanAmount,scholar, cohort,collateral, loanType, reason } = await request.json()
+    const { fullName, email, phoneNumber, school, otherSchool, level, loanAmount,scholar, cohort,collateral, loanType, reason } = await request.json()
 
     if (!fullName || !email || !phoneNumber || !school || !level || !loanAmount || !reason || !scholar || !loanType) {
       console.log('Missing fields:', { fullName, email, phoneNumber, school, level, loanAmount, reason,scholar,loanType })
@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
       email,
       phoneNumber,
       school,
-      level,
+      otherSchool,     
+       level,
       loanAmount: parseFloat(loanAmount),
       scholar,
       cohort,

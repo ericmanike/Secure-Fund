@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Cookies from 'js-cookie'
 import { Menu, X, Home, Info, FileText, User, LogOut, Shield, LayoutDashboard } from 'lucide-react'
 import AdminPanelSettingsTwoToneIcon from '@mui/icons-material/AdminPanelSettingsTwoTone';
@@ -50,15 +51,19 @@ export default function Navbar() {
   }
 
   return (
-    <nav className={`sticky top-0 z-50 bg-gray-900 text-white transition-all duration-300 ${
+    <nav className={`sticky top-0 z-50 bg-gray-900 text-white transition-all duration-300  ${
       isScrolled ? 'shadow-lg' : 'shadow-md'
     }`}>
       <div className="w-full  px-4 ">
         <div className="flex w-full justify-between items-center h-16 md:h-20 ">
-          {/* Logo */}
+
+         <Link href="/" >
+        <Image src="/logo.png" alt="Nyamekye Loans" width={150} height={50}  className='hidden md:block'/>
+          </Link>
+         
           <Link 
             href="/" 
-            className="flex items-center space-x-2 group"
+            className="md:hidden flex items-center space-x-2 group"
             onClick={closeMobileMenu}
           >
             <div className="bg-blue-600 p-2 rounded-lg group-hover:bg-blue-700 transition-colors">
@@ -68,6 +73,7 @@ export default function Navbar() {
               Nyamekye Loans
             </span>
           </Link>
+       
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center ">

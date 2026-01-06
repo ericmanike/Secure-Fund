@@ -26,6 +26,14 @@ const validationSchema = Yup.object({
     .required('Phone number is required'),
   school: Yup.string()
     .required('Please select your school'),
+
+  otherSchool: Yup.string()
+  .when('school', ([school], schema) => {
+  return school === 'Other' 
+    ? schema.required('Required')
+    : schema.strip();
+    
+    }),
   level: Yup.string()
     .oneOf(['100', '200', '300', '400','500', '600'], 'Please select a valid level')
     .required('Level is required'),
@@ -137,6 +145,7 @@ export default function Apply() {
           email: values.email,
           phoneNumber: values.phoneNumber,
           school: values.school,
+          otherSchool: values.otherSchool,
           level: values.level,
           loanAmount: values.loanAmount,
           scholar: values.scholarStatus,
@@ -189,6 +198,7 @@ export default function Apply() {
             email: '',
             phoneNumber: '',
             school: '',
+            otherSchool: '',
             level: '',
             scholarStatus: '',
             cohort: '',
@@ -288,6 +298,30 @@ export default function Apply() {
                   </Field>
                   <ErrorMessage name="school" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
+
+
+
+               { values.school === 'Other' && (
+                <div>
+                  <label htmlFor="otherSchool" className="block text-sm font-semibold text-gray-700 mb-2">
+                   Type University / School name<span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="text"
+                    id="otherSchool"
+                    name="otherSchool"
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
+                      errors.otherSchool && touched.otherSchool
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                  >
+                  
+                  </Field>
+                  <ErrorMessage name="otherSchool" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+               )}
+
 
                 <div>
                   <label htmlFor="level" className="block text-sm font-semibold text-gray-700 mb-2">
