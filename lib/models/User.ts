@@ -1,3 +1,4 @@
+import { exists } from 'fs'
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
 
@@ -34,15 +35,14 @@ const UserSchema: Schema = new Schema(
     },
     ghanaCard: {
       type: String,
-      unique: true,
       trim: true,
-      sparse: true,
+     
     },
     studentId: {
       type: String,
-      unique: true,
+   
       trim: true,
-      sparse: true,
+  
     },
     ghanaCardImage: {
       type: String,
@@ -62,6 +62,37 @@ const UserSchema: Schema = new Schema(
     timestamps: true,
   }
 )
+
+UserSchema.index(
+  {ghanaCard:1 },
+  {unique:true,
+    partialFilterExpression:{
+      role:'admin',
+      ghanaCard:{$exists:true, $ne:null},
+
+    }
+
+  }
+)
+
+UserSchema.index(
+  {studentId:1 },
+  {unique:true,
+    partialFilterExpression:{
+      role:'admin',
+      studentId:{$exists:true, $ne:null},
+    }
+
+  }
+)
+
+
+
+
+
+
+
+
 
 const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema)
 
