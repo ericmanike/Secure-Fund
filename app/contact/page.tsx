@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useToast } from '@/components/toastProvider';
 
+
 function ContactPage() {
 
   const {ref, inView} = useInView({
@@ -24,6 +25,11 @@ triggerOnce:true
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const {showToast} = useToast();
+
+
+
+
+
 
   const validate = () => {
     let tempErrors: { [key: string]: string } = {};
@@ -73,6 +79,7 @@ triggerOnce:true
 
   return (
     <div className=" bg-inherit  min-h-screen flex items-center justify-center  p-5">
+  
       <div className={`bg-white shadow-lg   rounded-xl p-8 w-full max-w-lg`} ref={ref}>
         <h2 className={`text-2xl font-bold text-blue-600 mb-5 text-center  transition-all duration-1000  relative after:absolute after:bottom-0 after:content-[''] after:bg-amber-950 
            

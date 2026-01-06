@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Cookies from 'js-cookie'
+import RepayTermsModal from '@/components/repayTermsModal';
 
 interface Loan {
   id: string
@@ -37,6 +38,8 @@ export default function RepayLoan() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [amountToPay, setAmountToPay] = useState<number | null>(null)
+   const [isModalOpen,setIsModalOpen]  = useState(true)
+  
 
   useEffect(() => {
     // Check for role cookie since token is httpOnly
@@ -171,6 +174,7 @@ useEffect(() => {
 
   return (
     <main className="min-h-screen py-16 bg-gray-50">
+      <RepayTermsModal isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)} />
       <div className="container mx-auto px-4 max-w-2xl">
         <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
           Repay Loan

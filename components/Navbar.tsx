@@ -53,8 +53,8 @@ export default function Navbar() {
     <nav className={`sticky top-0 z-50 bg-gray-900 text-white transition-all duration-300 ${
       isScrolled ? 'shadow-lg' : 'shadow-md'
     }`}>
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16 md:h-20">
+      <div className="w-full  px-4 ">
+        <div className="flex w-full justify-between items-center h-16 md:h-20 ">
           {/* Logo */}
           <Link 
             href="/" 
