@@ -1,65 +1,54 @@
 "use client"
 
-import { useState } from 'react'
-import { useToast } from './toastProvider'
-
 type Props = {
   isOpen: boolean
- 
   onClose: () => void
 }
 
-export default function RepayTermsModal({ isOpen,  onClose }: Props) {
-           
-    
-
-
-
-
+export default function RepayTermsModal({ isOpen, onClose }: Props) {
   if (!isOpen) return null
-
-  const handleSubmit = async () => {
-
-    
-
-
-   
-  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/50"  />
 
       <div className="relative bg-white w-full max-w-md mx-4 rounded-lg shadow-lg p-6">
-        <h3 className="text-lg font-semibold mb-3 text-center">Prevent Repayment Scams</h3>
+        <h3 className="text-lg font-semibold mb-4 text-center">Prevent Repayment Scams</h3>
   
-           <strong className='text-gray-600'> Any request to repay via a personal account is a scam!</strong>
+        <div className="space-y-4 text-sm">
+          <p className="font-semibold text-gray-700">
+            Any request to repay via a personal account is a scam!
+          </p>
              
-             
-             <p> Please remember, our only official repayment methods are:</p>
-            <ol  start={1}>
-            <li> Using the “repay” section on the platform </li>
-           <li> 2, Using MTN momo to send to <b> 0559868785</b></li>
-            For customer support, contact us through the following official channels:
-           <ul >
-            <li> Official number: <b>+233 559 868 785</b></li>
-             <li> live chat on the platform </li>
-            </ul>
+          <div>
+            <p className="mb-2">Please remember, our only official repayment methods are:</p>
+            <ol className="list-decimal list-inside space-y-1 ml-2">
+              <li>Using the "repay" section on the platform</li>
+              <li>Using MTN MoMo to send to <strong>0559868785</strong></li>
             </ol>
-          <strong className='text-gray-600'> Any other payment request or contact method is a scam.</strong>  
-
-
-  
-          <div className="flex justify-center mt-2">
-           
-            <button
-              className="px-4 py-2 rounded-md bg-blue-600 text-white disabled:opacity-50"
-              onClick={onClose}
-            >
-             I understand, continue
-            </button>
           </div>
-   
+
+          <div>
+            <p className="mb-2">For customer support, contact us through the following official channels:</p>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Official number: <strong>+233 559 868 785</strong></li>
+              <li>Live chat on the platform</li>
+            </ul>
+          </div>
+
+          <p className="font-semibold text-gray-700">
+            Any other payment request or contact method is a scam.
+          </p>
+        </div>
+
+        <div className="flex justify-center mt-6">
+          <button
+            className="px-6 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            onClick={onClose}
+          >
+            I understand, continue
+          </button>
+        </div>
       </div>
     </div>
   )
