@@ -51,7 +51,7 @@ const LoanSchema: Schema = new Schema(
     },
     otherSchool: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
 

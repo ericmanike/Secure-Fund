@@ -1,11 +1,14 @@
 "use client"
-
+import { useRouter } from "next/navigation"
 type Props = {
   isOpen: boolean
   onClose: () => void
 }
 
 export default function RepayTermsModal({ isOpen, onClose }: Props) {
+
+const router = useRouter()
+
   if (!isOpen) return null
 
   return (
@@ -41,7 +44,10 @@ export default function RepayTermsModal({ isOpen, onClose }: Props) {
           </p>
         </div>
 
-        <div className="flex justify-center mt-6">
+        <div className="flex  justify-between mt-6">
+          <button onClick={()=> router.push('/dashboard')}>
+            Cancel
+          </button>
           <button
             className="px-6 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
             onClick={onClose}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import Cloud from '@/lib/cloudinary'
+import ShowCardModal from '@/components/showCardModal'
 
 interface Loan {
   id: string
@@ -12,6 +13,7 @@ interface Loan {
   email: string
   phoneNumber: string
   school: string
+  otherSchool: string
   level: string
   loanAmount: number
   loanType: number
@@ -37,6 +39,12 @@ export default function Dashboard() {
   const [loans, setLoans] = useState<Loan[]>([])
   const [loading, setLoading] = useState(true)
 
+
+
+  //show image modal
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+ const [modalImage, setModalImage] = useState<string>("");
   useEffect(() => {
     // Check for role cookie since token is httpOnly
     const role = Cookies.get('role')
@@ -100,30 +108,29 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen py-16 bg-gray-50">
+      <ShowCardModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}   image={modalImage}/>
       <div className="container mx-auto px-4 max-w-6xl">
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Application Dashboard</h1>
 
         {/* User Profile Section */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-primary-600">Profile Information</h2>
+          <h2 className="text-3xl  mb-4 text-primary-600 text-center font-bold">Personal Information</h2>
+          <div className="px-4 md:px-8 py-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="h-0.5 bg-gradient-to-r from-transparent via-slate-600 to-transparent"></div>
+          </div>
+        </div>
           {user && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex flex-wrap justify-around items-center gap-4">
               <div className="space-y-2">
                 <p><span className="font-semibold text-gray-700">Full Name:</span> <span className="text-gray-600">{user.fullName}</span></p>
                 <p><span className="font-semibold text-gray-700">Email:</span> <span className="text-gray-600">{user.email}</span></p>
               </div>
-              <div className="space-y-2">
-                {user.ghanaCard && (
-                  <p><span className="font-semibold text-gray-700">Ghana Card:</span> <span className="text-gray-600">{user.ghanaCard}</span></p>
-                )}
-                {user.studentId && (
-                  <p><span className="font-semibold text-gray-700">Student ID:</span> <span className="text-gray-600">{user.studentId}</span></p>
-                )}
-              </div>
+             
               <div className="space-y-2 grid grid-cols-2 items-center justify-center">
             
-            <Cloud src={user?.ghanaCardImage} alt="Ghana Card Image" width={100} height={100} />
-            <Cloud src={user?.studentIdImage} alt="Student ID Image" width={100} height={100} />
+            <button onClick={() => {setModalImage(user?.ghanaCardImage || ""); setIsModalOpen(true);}} className='bg-blue-600 text-white p-2 w-[70%] rounded'>View </button><Cloud src={user?.ghanaCardImage} alt="Ghana Card Image" width={200} height={100}  />
+            <button onClick={() => {setModalImage(user?.studentIdImage || ""); setIsModalOpen(true);}} className='bg-blue-600 text-white p-2 w-[70%] rounded'>View </button><Cloud src={user?.studentIdImage} alt="Student ID Image" width={200} height={100} />
      
 
               </div>
@@ -171,7 +178,7 @@ export default function Dashboard() {
                       <td className="py-3 px-4"> 
                         GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount)).toLocaleString()}
                       </td>
-                      <td className="py-3 px-4">{loan.school}</td>
+                      <td className="py-3 px-4">{loan.school =='Other' ? loan.otherSchool : loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
                       <td className="py-3 px-4">
                         {new Date(loan.dateApplied).toLocaleDateString()}
