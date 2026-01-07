@@ -122,7 +122,7 @@ export default function Dashboard() {
         </div>
           {user && (
             <div className="flex flex-wrap justify-around items-center gap-4">
-              <div className="space-y-2">
+              <div className="space-y-2 text-2xl ">
                 <p><span className="font-semibold text-gray-700">Full Name:</span> <span className="text-gray-600">{user.fullName}</span></p>
                 <p><span className="font-semibold text-gray-700">Email:</span> <span className="text-gray-600">{user.email}</span></p>
               </div>

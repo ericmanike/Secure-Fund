@@ -1,6 +1,6 @@
 'use client'
 
-import {  useEffect, useState } from 'react'
+import {  use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
@@ -107,10 +107,16 @@ export default function Apply() {
   }
   , [])
 
+  useEffect(() => {
+    if (loan && loan.some((l: any) => l.status == 'pending' && l.userId === user?.id)) {
+      router.push('/dashboard')
+  }}
+  , [loan])
+
 
  
 
-  if (user?.role === 'student'  && loan?.some((l: any) =>l.status !== 'repaid' &&  l.status !=='rejected' && l.userId === user.id)) {
+  if (user?.role === 'student'  && loan?.some((l: any) =>l.status == 'approved' && l.userId === user.id)) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-xl text-center p-8 bg-white rounded-lg shadow-md">
@@ -119,7 +125,7 @@ export default function Apply() {
             You have already submitted a loan application. Please wait for it to be reviewed.
           </p>
           <button onClick={()=>router.push(`/repay/${loan[0].id}`)}
-            className='bg-slate-900 text-white p-3 rounded mt-4'
+            className='bg-blue-600 text-white p-3 rounded mt-4'
             
             >Repay Now</button>
         </div>
