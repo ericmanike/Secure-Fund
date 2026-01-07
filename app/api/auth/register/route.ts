@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { hashPassword } from '@/lib/auth'
 import { saveUser, getUserByEmail } from '@/lib/data'
+import { ratelimit } from '@/lib/rateLimit';
+import { headers } from 'next/headers';
+
+
 
 export async function POST(request: NextRequest) {
-  try {
-    const { fullName, email, ghanaCard, studentId, password, ghanaCardImage, studentIdImage } = await request.json()
 
+
+  try {
+    const { fullName, email, ghanaCard, studentId, password, ghanaCardImage, studentIdImage , vericationCode } = await request.json()
+  const identifier = email || request.headers.get('x-forwarded-for')
+  console.log('identifier for rate limiting:', identifier);
     if (!fullName || !email || !password || !ghanaCard || !studentId || !ghanaCardImage || !studentIdImage) {
       console.log('Missing fields:', { fullName, email, password, ghanaCard, studentId, ghanaCardImage, studentIdImage })
       return NextResponse.json(
@@ -13,6 +20,28 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+
+  const { success, limit, remaining, reset } =
+  await ratelimit.limit(identifier);
+
+if (!success) {
+  return NextResponse.json(
+    { error: 'Too many requests, please try again later.' },
+    {  
+      status: 429, 
+      headers: {
+      "X-RateLimit-Limit": limit.toString(),
+      "X-RateLimit-Remaining": remaining.toString(),
+      "X-RateLimit-Reset": reset.toString(),
+    }
+     },
+    
+    
+  );
+}
+
+
 
     // Check if user already exists
     const existingUser = await getUserByEmail(email)
@@ -39,6 +68,10 @@ export async function POST(request: NextRequest) {
       role: 'student' as const,
     }
 
+    const randomNumber = Math.floor(Math.random() * 6) + 1; 
+
+   
+    
     await saveUser(user)
 
     return NextResponse.json(

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { getUserByEmail } from "@/lib/data";
 import { Resend } from 'resend';
-import { error } from "console";
+import { ratelimit } from "@/lib/rateLimit";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
@@ -29,9 +29,37 @@ function verifyToken(token: string): { userId: string } | null {
 
   try {
     const { email } = await request.json();
+    const identifier = email || request.headers.get('x-forwarded-for')
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
+
+  
+  const { success, limit, remaining, reset } =
+  await ratelimit.limit(identifier);
+
+if (!success) {
+  return NextResponse.json(
+    { error: `Too many requests, please try again after few minutes.`},
+    {  
+      status: 429, 
+      headers: {
+      "X-RateLimit-Limit": limit.toString(),
+      "X-RateLimit-Remaining": remaining.toString(),
+      "X-RateLimit-Reset": reset.toString(),
+    }
+     },
+    
+    
+  );
+}
+
+
+
+
+
+
+
 
     const user = await getUserByEmail(String(email).toLowerCase());
 
