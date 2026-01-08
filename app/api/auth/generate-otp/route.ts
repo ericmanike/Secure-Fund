@@ -57,8 +57,8 @@ console.log("Resend response:", sendmail);
 
     cookiestore.set('verifyOtp',verifyOtp,{
         httpOnly:true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite:'strict',
+        secure: true,
+        sameSite:'lax',
         path:'/',   
         maxAge:5*60
     });
