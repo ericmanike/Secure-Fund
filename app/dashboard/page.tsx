@@ -140,11 +140,6 @@ export default function Dashboard() {
 
 
 
-
-
-
-
-
   if (loading) {
     return (
       <main className="min-h-screen py-16 bg-gray-50 flex items-center justify-center">
@@ -157,7 +152,7 @@ export default function Dashboard() {
  return(<div className='h-[70vh] flex flex-col justify-center items-center'>
          
          <div className='shadow-lg md:mt-10 px-5 py-10 flex flex-col justify-center items-center'>
-         <h2 className='my-5 px-5 text-2xl md:text-3xl text-slate-800 text-center'>Activate your account to start your loan application ASAP</h2>
+         <h2 className='my-5 px-5 text-1xl md:text-2xl text-slate-800 text-center'>Activate your account to start your loan application ASAP</h2>
       
       <button onClick={verifyEmail} className='bg-blue-600 text-white
            border-double rounded p-2 border-2'> {verifyEmailLoading ? 'Sending OTP...' : 'Activate Account'} 
@@ -179,12 +174,12 @@ export default function Dashboard() {
     <main className="min-h-screen py-16 bg-gray-50">
       <ShowCardModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}   image={modalImage}/>
       <div className="container mx-auto px-4 max-w-6xl">
-        <h1 className="text-4xl font-bold mb-8 text-gray-800">Application Dashboard</h1>
+        <h1 className=" text-2xl md:text-4xl font-bold mb-8 text-gray-800">Application Dashboard</h1>
 
         {/* User Profile Section */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
    
-          <h2 className="text-3xl  mb-4 text-primary-600 text-center font-bold">Personal Information    </h2>
+          <h2 className="text-1xl md:text-3xl mb-4 text-primary-600 text-center font-bold">Personal Information    </h2>
           <div className="px-4 md:px-8 py-8">
           <div className="max-w-6xl mx-auto">
             <div className="h-0.5 bg-gradient-to-r from-transparent via-slate-600 to-transparent"></div>
@@ -192,7 +187,7 @@ export default function Dashboard() {
         </div>
           {user && (
             <div className="flex flex-wrap justify-around items-center gap-4">
-              <div className="space-y-2 text-2xl ">
+              <div className="space-y-2 text-[16px] md:text-2xl ">
                 <p><span className="font-semibold text-gray-700">Full Name:</span> <span className="text-gray-600">{user.fullName}</span></p>
                 <p><span className="font-semibold text-gray-700">Email:</span> <span className="text-gray-600">{user.email}</span></p>
               </div>
