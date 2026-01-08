@@ -57,7 +57,7 @@ export default function Navbar() {
       <div className="w-full  px-4 ">
         <div className="flex w-full justify-between items-center h-16 md:h-20 ">
 
-         <Link href="/" >
+         <Link href="/" className='hidden md:block' >
         <Image src="/logo.png" alt="Nyamekye Loans" width={150} height={50}  className='hidden md:block'/>
           </Link>
          
