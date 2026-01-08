@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { saveLoan } from '@/lib/data'
 import { getAuthUser } from '@/lib/middleware'
-
+import { getUserById } from '@/lib/data'
 export async function POST(request: NextRequest) {
   try {
     const user = getAuthUser(request)
@@ -10,6 +10,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Authentication required. Please login to apply for a loan.' },
         { status: 401 }
+      )
+    }
+
+      const fullUser = await getUserById(user.userId)
+
+   if (!fullUser?.isEmailVerified) {
+      return NextResponse.json(
+        { error: 'Email not verified. Please verify your email before applying for a loan.' },
+        { status: 403 }
       )
     }
 

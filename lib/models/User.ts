@@ -10,6 +10,7 @@ export interface IUser extends Document {
   ghanaCardImage?: string // URL/path to Ghana Card image
   studentIdImage?: string // URL/path to Student ID image
   role: 'student' | 'admin'
+  isEmailVerified: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -56,6 +57,13 @@ const UserSchema: Schema = new Schema(
       enum: ['student', 'admin'],
       default: 'student',
     },
+
+  isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+
   },
   {
     timestamps: true,

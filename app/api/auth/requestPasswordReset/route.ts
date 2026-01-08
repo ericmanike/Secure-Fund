@@ -7,7 +7,6 @@ import { ratelimit } from "@/lib/rateLimit";
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
 export async function POST(request: NextRequest) {
-
     const JWT_SECRET = process.env.JWT_SECRET!;
 
  function resetToken(userId: string): string {
@@ -65,7 +64,7 @@ if (!success) {
 
 
     console.log("user you are resetting password for:", user)
-    // For security, respond the same whether user exists or not.
+    
     if (!user) {
       return NextResponse.json({ error: " Please register first" });
     }
@@ -76,7 +75,7 @@ if (!success) {
     }
 
     await resend.emails.send({
-      from: 'Secure Fund <info@ericmanike.tech>',
+      from: 'Nyamekye Loans <info@recyco.me>',
       to: `${user.email}`,
       subject: 'Request to reset your password',
       html: `<div>

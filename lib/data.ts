@@ -38,6 +38,7 @@ function convertUser(user: IUser): UserType {
     ghanaCardImage: user.ghanaCardImage,
     studentIdImage: user.studentIdImage,
     role: user.role,
+    isEmailVerified:user.isEmailVerified,
   }
 }
 
@@ -88,6 +89,7 @@ export async function saveUser(user: UserType): Promise<void> {
       ghanaCardImage: user.ghanaCardImage,
       studentIdImage: user.studentIdImage,
       role: user.role,
+      isEmailVerified: user.isEmailVerified,
     }
     
     // Only set _id if provided (for admin creation script)

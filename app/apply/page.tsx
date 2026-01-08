@@ -108,7 +108,7 @@ export default function Apply() {
   , [])
 
   useEffect(() => {
-    if (loan && loan.some((l: any) => l.status == 'pending' && l.userId === user?.id)) {
+    if (loan && loan.some((l: any) => l.status == 'pending' && l.userId === user?.id) || !user?.isEmailVerified) {
       router.push('/dashboard')
   }}
   , [loan])

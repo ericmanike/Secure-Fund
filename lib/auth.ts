@@ -13,6 +13,7 @@ export interface User {
   ghanaCardImage?: string
   studentIdImage?: string
   role: 'student' | 'admin'
+  isEmailVerified: boolean
 }
 
 export async function hashPassword(password: string): Promise<string> {

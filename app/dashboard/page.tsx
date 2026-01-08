@@ -6,6 +6,8 @@ import Cookies from 'js-cookie'
 import Link from 'next/link'
 import Cloud from '@/lib/cloudinary'
 import ShowCardModal from '@/components/showCardModal'
+import { useToast } from '@/components/toastProvider'
+
 
 interface Loan {
   id: string
@@ -29,6 +31,7 @@ interface User {
   ghanaCard?: string
   studentId?: string
   role: string
+  isEmailVerified:string
   ghanaCardImage?: string
   studentIdImage?: string
 }
@@ -38,6 +41,10 @@ export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null)
   const [loans, setLoans] = useState<Loan[]>([])
   const [loading, setLoading] = useState(true)
+
+  const [verifyEmailLoading, setVerifyEmailLoading] = useState(false);
+
+      const {showToast} = useToast()
 
 
 
@@ -98,6 +105,46 @@ export default function Dashboard() {
     }
   }
 
+
+
+  // loading state
+
+
+   
+  const verifyEmail =  async() => {
+    try {
+        setVerifyEmailLoading(true);
+      const response = await fetch('/api/auth/generate-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: user?.email }),
+      });
+    
+      const data = await response.json();
+      if (response.ok) {
+        showToast('OTP sent to your email for verification.','success');
+      } else {
+         showToast(data.error || 'Failed to send OTP.','error');
+      } 
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      showToast('An error occurred while sending OTP.','error');
+    } finally {
+      setVerifyEmailLoading(false);
+    }
+   
+  }
+
+
+
+
+
+
+
+
+
   if (loading) {
     return (
       <main className="min-h-screen py-16 bg-gray-50 flex items-center justify-center">
@@ -106,7 +153,29 @@ export default function Dashboard() {
     )
   }
 
+  if(!user?.isEmailVerified){
+ return(<div className='h-[70vh] flex flex-col justify-center items-center'>
+         
+         <div className='shadow-lg md:mt-10 px-5 py-10 flex flex-col justify-center items-center'>
+         <h2 className='my-5 px-5 text-2xl md:text-3xl text-slate-800 text-center'>Activate your account to start your loan application ASAP</h2>
+      
+      <button onClick={verifyEmail} className='bg-blue-600 text-white
+           border-double rounded p-2 border-2'> {verifyEmailLoading ? 'Sending OTP...' : 'Activate Account'} 
+       </button>
+      </div>
+  
+          </div>
+ )
+  }
+
+
+
+
   return (
+
+
+
+
     <main className="min-h-screen py-16 bg-gray-50">
       <ShowCardModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}   image={modalImage}/>
       <div className="container mx-auto px-4 max-w-6xl">
@@ -114,7 +183,8 @@ export default function Dashboard() {
 
         {/* User Profile Section */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <h2 className="text-3xl  mb-4 text-primary-600 text-center font-bold">Personal Information</h2>
+   
+          <h2 className="text-3xl  mb-4 text-primary-600 text-center font-bold">Personal Information    </h2>
           <div className="px-4 md:px-8 py-8">
           <div className="max-w-6xl mx-auto">
             <div className="h-0.5 bg-gradient-to-r from-transparent via-slate-600 to-transparent"></div>

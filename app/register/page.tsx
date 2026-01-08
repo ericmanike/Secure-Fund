@@ -6,6 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useState } from 'react'
 import ResetRequestModal from '../../components/ResetRequestModal'
+import OtpInput from 'react-otp-input';
 
 const validationSchema = Yup.object({
   fullName: Yup.string()
@@ -57,7 +58,9 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+ const [readyToverify, setReadyToVerify] = useState(false);
 
+ const [otp, setOtp] = useState("");
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'ghanaCard' | 'studentId', setPreview: (url: string | null) => void) => {
     const file = e.target.files?.[0]
     if (file) {
@@ -108,6 +111,9 @@ export default function Register() {
         return
       }
 
+       
+
+
       // Register user with image URLs
       const response = await fetch('/api/auth/register', {
         method: 'POST',
@@ -143,8 +149,13 @@ export default function Register() {
     }
   }
 
+
+
+
   return (
-    <main className="min-h-screen py-16 bg-gray-50 flex items-center justify-center px-4">
+    <main className="min-h-screen py-16 bg-gray-50 flex flex-col items-center justify-center px-4">
+
+
       <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg border border-gray-100">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
@@ -373,6 +384,11 @@ export default function Register() {
                 </Field>
                 <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
               </div>
+          
+
+         
+
+
 
               <button
                 type="submit"
@@ -402,6 +418,13 @@ export default function Register() {
         </p>
       <ResetRequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
+
+
+
+
+
+      
+
     </main>
   )
 }
