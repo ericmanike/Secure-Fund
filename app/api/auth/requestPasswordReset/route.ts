@@ -89,6 +89,11 @@ if (!success) {
        
 
     console.log("Password reset email sent response:", res);
+    if(res.error){
+      console.log("Error sending reset email:", res.error);
+      return NextResponse.json({ error: "Failed to send reset email" }, { status: 500 });
+
+    }
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.log("Error processing password reset request:", error);
