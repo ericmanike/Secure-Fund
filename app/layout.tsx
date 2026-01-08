@@ -13,13 +13,13 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 
-    (process.env.NODE_ENV === 'production' ? 'https://securefund.gh' : 'http://localhost:3000')
+    (process.env.NODE_ENV === 'production' ? 'https://nyamekyeloans.com' : 'http://localhost:3000')
   ),
   title: {
     default: 'Nyamekye Loans - Student Loan Platform for Ghanaian Students',
     template: '%s | Nyamekye Loans',
   },
-  description: 'Empowering Ghanaian students with accessible educational loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
+  description: 'Empowering  students with accessible quick loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
   keywords: ['student loans', 'Ghana', 'education loans', 'KNUST', 'UG', 'UCC', 'university loans', 'student funding'],
   authors: [{ name: 'Nyamekye Loans' }],
   openGraph: {
@@ -27,13 +27,13 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: '/',
     siteName: 'Nyamekye Loans',
-    title: 'Nyamekye Loans - Student Loan Platform for Ghanaian Students',
-    description: 'Empowering Ghanaian students with accessible educational loans',
+    title: 'Nyamekye Loans - Student Loan Platform for  Students',
+    description: 'Empowering students with accessible quick loans',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Nyamekye Loans - Student Loan Platform',
-    description: 'Empowering Ghanaian students with accessible educational loans',
+    description: 'Empowering students with accessible educational loans',
   },
   robots: {
     index: true,
