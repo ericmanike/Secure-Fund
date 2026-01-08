@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
 
 const JWT_SECRET = process.env.JWT_SECRET!
 
@@ -15,6 +16,11 @@ export interface User {
   role: 'student' | 'admin'
   isEmailVerified: boolean
 }
+
+
+export const hashOtp  =  (otp: string): string => {
+  return crypto.createHash('sha256').update(otp).digest('hex');
+} 
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10)

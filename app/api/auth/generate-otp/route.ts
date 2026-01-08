@@ -3,20 +3,17 @@ import { NextRequest, NextResponse } from "next/server";
 import otpGenerator from 'otp-generator';
 import { Resend } from "resend";
 import { ratelimit } from "@/lib/rateLimit";
-import crypto from "crypto";
 import { getUserByEmail } from "@/lib/data";
-import User from "@/lib/models/User";
 import connectDB from "@/lib/mongodb";
 import Otp from "@/lib/models/Otp";
+import { hashOtp } from "@/lib/auth";
 
   
 
 
 
  
-export const hashOtp  =  (otp: string): string => {
-  return crypto.createHash('sha256').update(otp).digest('hex');
-} 
+
 
 
 export  async function POST(req:NextRequest){

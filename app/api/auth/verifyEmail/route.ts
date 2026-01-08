@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail } from "@/lib/data";
 import User from "@/lib/models/User";
-import { hashOtp } from "../generate-otp/route";
+import { hashOtp } from "@/lib/auth";
 import connectDB from "@/lib/mongodb";
 import Otp from "@/lib/models/Otp";
 
