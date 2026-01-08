@@ -66,6 +66,7 @@ if (!success) {
       studentIdImage,
       password: hashedPassword,
       role: 'student' as const,
+      isEmailVerified: false,
     }
 
     const randomNumber = Math.floor(Math.random() * 6) + 1; 
