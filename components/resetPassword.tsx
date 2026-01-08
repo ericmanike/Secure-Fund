@@ -41,7 +41,7 @@ const {showToast} = useToast()
       return;
     }
     try {
-      const res = await fetch('http://localhost:3000/api/auth/resetPassword', {
+      const res = await fetch('/api/auth/resetPassword', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({token:token,email:email,newPassword:newPassword } ),
