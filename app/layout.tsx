@@ -12,8 +12,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 
-    (process.env.NODE_ENV === 'production' ? 'https://nyamekyeloans.com' : 'http://localhost:3000')
+    'https://nyamekyeloans.vercel.app'
   ),
   title: {
     default: 'Nyamekye Loans - Student Loan Platform for Ghanaian Students',
@@ -23,6 +22,7 @@ export const metadata: Metadata = {
   keywords: ['student loans', 'Ghana', 'education loans', 'KNUST', 'UG', 'UCC', 'university loans', 'student funding'],
   authors: [{ name: 'Nyamekye Loans' }],
   openGraph: {
+    images: ['https://nyamekyeloans.vercel.app/og-image.png'],
     type: 'website',
     locale: 'en_US',
     url: '/',
