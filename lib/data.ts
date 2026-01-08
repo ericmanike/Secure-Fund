@@ -39,6 +39,7 @@ function convertUser(user: IUser): UserType {
     studentIdImage: user.studentIdImage,
     role: user.role,
     isEmailVerified:user.isEmailVerified,
+   
   }
 }
 
