@@ -74,7 +74,7 @@ if (!success) {
       return NextResponse.json({ error: "Could not generate reset token" }, { status: 500 });
     }
 
-    await resend.emails.send({
+  const res  =  await resend.emails.send({
       from: 'Nyamekye Loans <info@recyco.me>',
       to: `${user.email}`,
       subject: 'Request to reset your password',
@@ -86,7 +86,9 @@ if (!success) {
         <p>Thanks,<br/>Secure Fund Team</p>
       </div>`,
     });
+       
 
+    console.log("Password reset email sent response:", res);
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.log("Error processing password reset request:", error);
