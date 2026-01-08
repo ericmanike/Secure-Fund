@@ -10,19 +10,9 @@ import { hashOtp } from "@/lib/auth";
 
   
 
-
-
- 
-
-
-
 export  async function POST(req:NextRequest){
     const {email} = await req.json();
       const cookiestore = await cookies();
-
-
-
-
 
 
     
@@ -58,7 +48,7 @@ export  async function POST(req:NextRequest){
       expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes from now
       }
     )
-    console.log("OTP saved to DB:", OtpCreated);
+    //console.log("OTP saved to DB:", OtpCreated);
 
 
 
@@ -97,7 +87,7 @@ if (!success) {
                <p>This OTP is valid for 5 minutes.</p>`,
 
     });
-console.log("Resend response:", sendmail);
+//console.log("Resend response:", sendmail);
 
 
 
@@ -110,7 +100,7 @@ console.log("Resend response:", sendmail);
         maxAge:5*60
     });
 
-    console.log("Generated OTP:", verificationOtp);
+   // console.log("Generated OTP:", verificationOtp);
     return NextResponse.json({message:`OTP sent to email successfully ${verificationOtp}`},{status:200});
 } catch (error) {
     console.log("Error generating OTP:", error);

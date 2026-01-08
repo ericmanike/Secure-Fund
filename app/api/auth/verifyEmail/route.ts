@@ -6,11 +6,6 @@ import connectDB from "@/lib/mongodb";
 import Otp from "@/lib/models/Otp";
 
 
-
-
-
-
-
 export  async function POST(req:NextRequest){
 
     const {email,otp} = await req.json();
@@ -32,9 +27,9 @@ export  async function POST(req:NextRequest){
 
     const verifiedUser = await User.findByIdAndUpdate(userId,{isEmailVerified:true});
      const res  = await Otp.deleteOne({ _id: otpRecord._id });
-     console.log('OTP record deleted:', res);
+    //console.log('OTP record deleted:', res);
 
-    console.log('Email verified for user:', verifiedUser)
+    //console.log('Email verified for user:', verifiedUser)
     return NextResponse.json({message:"Email verified successfully."},{status:200});
 
 } catch (error) {
