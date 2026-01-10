@@ -138,6 +138,7 @@ LoanSchema.pre('save', function (next) {
     } 
   }
   next()
+  console.log('Due date set to:', this.dueDate)
 }
 )
 
