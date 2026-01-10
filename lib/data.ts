@@ -21,6 +21,7 @@ export interface Loan {
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
+  dueDate: string
   dateReviewed?: string
   reviewedBy?: string
 }
@@ -61,6 +62,7 @@ function convertLoan(loan: ILoan): Loan {
     reason: loan.reason,
     status: loan.status,
     dateApplied: loan.dateApplied.toISOString(),
+    dueDate: loan.dueDate?.toISOString(),
     dateReviewed: loan.dateReviewed?.toISOString(),
     reviewedBy: loan.reviewedBy,
   }
@@ -187,6 +189,7 @@ export async function saveLoan(loan: Omit<Loan, 'id'>): Promise<string> {
       reason: loan.reason,
       status: loan.status,
       dateApplied: new Date(loan.dateApplied),
+      dueDate: loan?.dueDate ? new Date(loan?.dueDate) : undefined,
     })
     return newLoan._id.toString()
   } catch (error) {
