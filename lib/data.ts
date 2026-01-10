@@ -4,7 +4,6 @@ import Loan, { ILoan } from './models/Loan'
 import { User as UserType } from './auth'
 import jwt from 'jsonwebtoken'
 
-
 export interface Loan {
   id: string
   userId: string
@@ -203,22 +202,23 @@ export async function updateLoanStatus(
 ): Promise<boolean> {
   try {
     await connectDB()
-    const loan = await Loan.findByIdAndUpdate(
-      loanId,
-      {
-        status,
-        dateReviewed: new Date(),
-        reviewedBy,
-      },
-      { new: true }
-    )
-    loan?.save()
-    return !!loan
+
+    const loan = await Loan.findById(loanId)
+    if (!loan) return false
+
+    loan.status = status
+    loan.reviewedBy = reviewedBy
+    loan.dateReviewed = new Date()
+
+    await loan.save()
+
+    return true
   } catch (error) {
     console.error('Error updating loan status:', error)
     return false
   }
 }
+
 
 export async function getLoansByUserId(userId: string): Promise<Loan[]> {
   try {
@@ -235,6 +235,7 @@ export async function deleteLoanById(loanId: string): Promise<boolean> {
   try {
     await connectDB()
     const result = await Loan.findByIdAndDelete(loanId)
+    result?.save()
     return !!result
   } catch (error) {
     console.error('Error deleting loan:', error)

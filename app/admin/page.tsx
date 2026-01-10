@@ -22,6 +22,7 @@ interface Loan {
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
+  dueDate: string
   dateReviewed?: string
   reviewedBy?: string
 }
@@ -44,9 +45,6 @@ export default function AdminDashboard() {
 //comfirm state
 
 const [confirmstate, setConfirmstate] = useState(false);
-
-
-
 
 
   useEffect(() => {
@@ -262,6 +260,7 @@ const [confirmstate, setConfirmstate] = useState(false);
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Total to repay</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Reason</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Date Applied</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Due Date</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700"  colSpan={10}>Collateral</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Scholar?</th>
@@ -288,6 +287,11 @@ const [confirmstate, setConfirmstate] = useState(false);
                       </td>
                       <td className="py-3 px-4">
                         {new Date(loan.dateApplied).toLocaleDateString()}
+                      </td>
+
+
+                      <td className="py-3 px-4">
+                        {loan.dueDate ? new Date(loan.dueDate).toLocaleDateString() : 'Not set yet'}
                       </td>
                       <td className="py-3 px-4">
                         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(loan.status)}`}>

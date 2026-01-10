@@ -100,6 +100,13 @@ const LoanSchema: Schema = new Schema(
       type: Date,
       default: Date.now,
     },
+
+    
+    dueDate: {
+      type: Date,
+     },
+
+     
     dateReviewed: {
       type: Date,
     },
@@ -108,9 +115,6 @@ const LoanSchema: Schema = new Schema(
     },
 
 
-    dueDate: {
-      type: Date,
-     },
 
     },
 
@@ -136,10 +140,6 @@ LoanSchema.pre('save', function (next) {
   next()
 }
 )
-
-
-
-
 
 
 
