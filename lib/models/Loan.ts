@@ -126,7 +126,7 @@ const LoanSchema: Schema = new Schema(
 
 
 LoanSchema.pre('save', function (next) {
-  if (!this.dueDate && this.status === 'approved') {
+  if (this.dueDate== 'N/A' && this.status === 'approved') {
     const loanType = this.loanType
     if (loanType === 7) {
       this.dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)

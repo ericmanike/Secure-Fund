@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       reason,
       status: 'pending' as const,
       dateApplied: new Date().toISOString(),
-      dueDate: 'Not set',
+      dueDate: 'N/A',
     }
      console.log('Saving loan application on API route:', loan)
     const loanId = await saveLoan(loan)
