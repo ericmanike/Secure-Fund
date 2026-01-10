@@ -138,7 +138,7 @@ export default function Apply() {
 
 
 
-  const handleSubmit = async (values: any, { setSubmitting, setStatus }: any) => {
+  const handleSubmit = async (values: any, { setSubmitting, setStatus  , resetForm }: any) => {
     console.log('Submitting application with values:', values)
     try {
       const response = await fetch('/api/loans/apply', {
@@ -165,6 +165,7 @@ export default function Apply() {
       const data = await response.json()
 
       if (response.ok) {
+        resetForm()
         setStatus({ success: 'Application submitted successfully! You will be notified once it is reviewed.' })
         setTimeout(() => {
           router.push('/dashboard')
@@ -217,6 +218,7 @@ export default function Apply() {
           
           onSubmit={
               handleSubmit
+              
           }
         >
           {({ isSubmitting, errors, touched, status,values }) => (

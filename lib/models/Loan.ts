@@ -133,7 +133,7 @@ LoanSchema.pre('save', function (next) {
       this.dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     }
     else if (loanType === 9) {
-      this.dueDate = new Date(Date.now() + 21 * 24 * 60 * 60 * 1000)
+      this.dueDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
     }
     else {
       this.dueDate = new Date(Date.now() + 31 * 24 * 60 * 60 * 1000)
