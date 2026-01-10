@@ -189,7 +189,7 @@ export async function saveLoan(loan: Omit<Loan, 'id'>): Promise<string> {
       reason: loan.reason,
       status: loan.status,
       dateApplied: new Date(loan.dateApplied),
-      dueDate: loan?.dueDate ? new Date(loan?.dueDate) : 'Not set',
+      dueDate: loan?.dueDate ? new Date(loan?.dueDate) : null,
     })
     return newLoan._id.toString()
   } catch (error) {
