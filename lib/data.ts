@@ -212,6 +212,7 @@ export async function updateLoanStatus(
       },
       { new: true }
     )
+    loan?.save()
     return !!loan
   } catch (error) {
     console.error('Error updating loan status:', error)
