@@ -21,7 +21,7 @@ export interface Loan {
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
   dateApplied: string
-  dueDate: string
+  dueDate: string | null
   dateReviewed?: string
   reviewedBy?: string
 }
@@ -62,7 +62,7 @@ function convertLoan(loan: ILoan): Loan {
     reason: loan.reason,
     status: loan.status,
     dateApplied: loan.dateApplied.toISOString(),
-    dueDate: loan.dueDate?.toISOString(),
+    dueDate: loan.dueDate?.toISOString() || null,
     dateReviewed: loan.dateReviewed?.toISOString(),
     reviewedBy: loan.reviewedBy,
   }

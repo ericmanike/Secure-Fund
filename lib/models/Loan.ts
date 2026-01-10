@@ -16,7 +16,7 @@ export interface ILoan extends Document {
   loanType: Number
   reason: string
   status: 'pending' | 'approved' | 'rejected' | 'repaid'
-  dueDate:Date
+  dueDate:Date | null
   dateApplied: Date
   dateReviewed?: Date
   reviewedBy?: string
@@ -105,6 +105,7 @@ const LoanSchema: Schema = new Schema(
     
     dueDate: {
       type: Date,
+      default: null
      },
 
      
@@ -126,7 +127,7 @@ const LoanSchema: Schema = new Schema(
 
 
 LoanSchema.pre('save', function (next) {
-  if (this.dueDate== 'N/A' && this.status === 'approved') {
+  if (!this.dueDate && this.status === 'approved') {
     const loanType = this.loanType
     if (loanType === 7) {
       this.dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
