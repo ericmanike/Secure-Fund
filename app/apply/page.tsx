@@ -405,7 +405,7 @@ export default function Apply() {
                     as="select"
                     id="cohort"
                     name="cohort"
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
+                    className={`w-full  px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white ${
                       errors.cohort && touched.cohort
                         ? 'border-red-500'
                         : 'border-gray-700'
