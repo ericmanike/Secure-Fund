@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import { useAuth } from '@/lib/authContext'
 
 
+
 const schools = [
   'KNUST - Kwame Nkrumah University of Science and Technology',
   'Other',

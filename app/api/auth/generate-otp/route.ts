@@ -23,15 +23,6 @@ export  async function POST(req:NextRequest){
         return NextResponse.json({error:`User with email ${email} not found`},{status:404});
       }
 
-
-     
-    
-
-
-
-
-
-
     try {
    
        
