@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
+
 export interface ILoan extends Document {
   userId: string
   fullName: string
