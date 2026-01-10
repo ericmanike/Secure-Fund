@@ -21,17 +21,7 @@ const ratelimit = new Ratelimit({
   redis,
   limiter: Ratelimit.slidingWindow(1,"1m"), 
   analytics: true, 
-});
-
-
-
-
-
-
-
-
-
-
+})
   try {
     const user = getAuthUser(request)
     
