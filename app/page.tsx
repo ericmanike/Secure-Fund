@@ -4,10 +4,61 @@ import { GraduationCap, Wallet, Zap } from 'lucide-react'
 import TextType from '@/components/TextType'
 
 export const metadata: Metadata = {
-  title: 'Home - Nyamekye Loans | Student Loan Platform for  Students',
-  description: 'Empowering  students with accessible educational loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
+  title: 'Home - Nyamekye Loans | Loan Platform for  Students',
+  description: 'Empowering  students with accessible  loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
   keywords: 'student loans, Ghana, education loans, KNUST, UG, UCC, university loans',
+
+
+
+
+
+
+
+  openGraph: {
+    title: 'Home - Nyamekye Loans | Loan Platform for  Students',
+    description: 'Empowering  students with accessible  loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
+    url: 'https://nyamekyeloans.com/',
+    siteName: 'Nyamekye Loans',
+    images: [
+      {
+        url: 'https://nyamekyeloans.com/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Nyamekye Loans',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Home - Nyamekye Loans | Loan Platform for  Students',
+    description: 'Empowering  students with accessible educational loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
+    images: ['https://nyamekyeloans.com/og-image.jpg'],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+    
+
+  },
+
+  alternates: {
+    canonical: 'https://nyamekyeloans.com/',
+  },
+
+
 }
+
 
 export default function Home() {
   return (
