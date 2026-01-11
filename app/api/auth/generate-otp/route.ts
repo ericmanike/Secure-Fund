@@ -69,7 +69,7 @@ if (!success) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
   const sendmail =  await resend.emails.send({
-      from:"NyamekyeLoans <info@recyco.me>",
+      from:"NyamekyeLoans <info@nyamekyeloans.com>",
         to:`${email}`,
         subject: "Your Verification OTP",
         html: `<p>Your OTP for email verification is: <strong>${verificationOtp}</strong></p><br/>

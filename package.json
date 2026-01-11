@@ -29,6 +29,7 @@
     "mongoose": "^8.20.4",
     "next": "^14.2.35",
     "next-cloudinary": "^6.17.5",
+    "next-sitemap": "^4.2.3",
     "otp-generator": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

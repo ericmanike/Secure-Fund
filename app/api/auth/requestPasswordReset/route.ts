@@ -75,7 +75,7 @@ if (!success) {
     }
 
   const res  =  await resend.emails.send({
-      from: 'Nyamekye Loans <info@recyco.me>',
+      from: 'Nyamekye Loans <info@nyamekyeloans.com>',
       to: `${user.email}`,
       subject: 'Request to reset your password',
       html: `<div>

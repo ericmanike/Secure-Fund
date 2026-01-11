@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import { Resend} from "resend";
 
 
 export async function POST(request: NextRequest) {
@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 
     const resend = new Resend(process.env.RESEND_API_KEY!);
     await resend.emails.send({
-        from: "Nyamekye Loans <info@recyco.me>",
+        from: "Nyamekye Loans <info@nyamekyeloans.com>",
         to: "nyamekyejoshua1720@gmail.com",
         subject: `New Contact Form Submission from ${name}`,
         html: ` <h1>New Contact Form Submission</h1>
