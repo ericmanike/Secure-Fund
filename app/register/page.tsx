@@ -7,6 +7,7 @@ import * as Yup from 'yup'
 import { useState } from 'react'
 import ResetRequestModal from '../../components/ResetRequestModal'
 import OtpInput from 'react-otp-input';
+import { useToast } from '@/components/toastProvider'
 
 const validationSchema = Yup.object({
   fullName: Yup.string()
@@ -59,6 +60,7 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
  const [readyToverify, setReadyToVerify] = useState(false);
+  const {showToast} = useToast();
 
  const [otp, setOtp] = useState("");
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'ghanaCard' | 'studentId', setPreview: (url: string | null) => void) => {
@@ -98,6 +100,10 @@ export default function Register() {
       setUploadProgress(prev => ({ ...prev, [type]: false }))
     }
   }
+
+   
+
+ 
 
   const handleSubmit = async (values: any, { setSubmitting, setFieldError }: any) => {
     try {

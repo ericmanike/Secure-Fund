@@ -15,6 +15,7 @@ export interface User {
   studentIdImage?: string
   role: 'student' | 'admin'
   isEmailVerified: boolean
+  agreedToTerms: boolean
 }
 
 

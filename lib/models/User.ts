@@ -11,7 +11,7 @@ export interface IUser extends Document {
   studentIdImage?: string // URL/path to Student ID image
   role: 'student' | 'admin'
   isEmailVerified: boolean
- 
+  agreedToTerms: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -63,9 +63,12 @@ const UserSchema: Schema = new Schema(
       default: false,
     },
 
+    agreedToTerms: {
+      type: Boolean,
+      default: false,
+    },
+
   
-
-
 
   },
   {

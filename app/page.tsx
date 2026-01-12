@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { GraduationCap, Wallet, Zap } from 'lucide-react'
 import TextType from '@/components/TextType'
 
+
 export const metadata: Metadata = {
   title: 'Home - Nyamekye Loans | Loan Platform for  Students',
   description: 'Empowering  students with accessible  loans. Apply for student loans at KNUST, UG, UCC, and other universities in Ghana.',
@@ -63,6 +64,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="min-h-screen">
+  
       {/* Hero Section */}
       <section className="  py-20">
         <div className="container mx-auto px-4">

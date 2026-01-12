@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { hashPassword } from '@/lib/auth'
 import { saveUser, getUserByEmail } from '@/lib/data'
 import { ratelimit } from '@/lib/rateLimit';
-import { headers } from 'next/headers';
+
 
 
 
@@ -67,9 +67,10 @@ if (!success) {
       password: hashedPassword,
       role: 'student' as const,
       isEmailVerified: false,
+      agreedToTerms:false,
     }
 
-    const randomNumber = Math.floor(Math.random() * 6) + 1; 
+   
 
    
     

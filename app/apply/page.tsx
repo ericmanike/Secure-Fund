@@ -6,7 +6,8 @@ import Cookies from 'js-cookie'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useAuth } from '@/lib/authContext'
-
+import ApplicationTermsModal from '@/components/applicationTermsModal'
+import { useToast } from '@/components/toastProvider'
 
 
 const schools = [
@@ -72,6 +73,7 @@ export default function Apply() {
   const router = useRouter()
   const { user, loading } = useAuth()
   const [loan, setLoan] = useState<any>(null)
+  const [loanloading, setLoanloading] = useState(false);
 
   useEffect(() => {
     // Check for role cookie since token is httpOnly
@@ -89,8 +91,38 @@ export default function Apply() {
   }, [router])
 
 
+
+  const {showToast} = useToast();
+  const [agreedToTerms, setAgreedToTerms] = useState(user?.agreedToTerms);
+
+   const AgreeToterms = async () => { 
+
+    try {
+      const response = await fetch('/api/agreeToterm', {
+        method: 'POST',
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setAgreedToTerms(true);
+        showToast('Successfully agreed to terms and conditions.', 'success');
+        console.log('Agreed to terms successfully')
+      } else {
+        console.error('Error agreeing to terms:', data.error)
+      }
+    } catch (error) {
+      console.error('Error in AgreeToterms:', error)
+    }
+  }
+
+
+
+
+
+
+
   useEffect(() => {
     const fetchLoan = async () => {
+      setLoanloading(true)    
       try {
         console.log('Fetching loan data...')
         const response = await fetch('/api/loans')
@@ -99,14 +131,29 @@ export default function Apply() {
           setLoan(data.loans)
           console.log('Fetched loan:', data.loans)
         }
+
       } catch (error) {
         console.error('Error fetching loan:', error)
+      } finally {
+        setLoanloading(false)
       }
     }
 
     fetchLoan()
   }
   , [])
+
+
+
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     if (loan && loan.some((l: any) => l.status == 'pending' && l.userId === user?.id) || !user?.isEmailVerified) {
@@ -183,7 +230,7 @@ export default function Apply() {
   }
 
 
-  if (loading) {
+  if (loading || loanloading) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-xl">Loading...</div>
@@ -193,6 +240,8 @@ export default function Apply() {
 
   return (
     <main className="min-h-screen py-16 bg-gray-50">
+
+      <ApplicationTermsModal isOpen={!agreedToTerms} onClose={() => AgreeToterms()} />
 
       <div className="container mx-auto px-4 max-w-2xl">
         <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
