@@ -72,7 +72,7 @@ if (!success) {
       from:"NyamekyeLoans <info@nyamekyeloans.com>",
         to:`${email}`,
         subject: "Your Verification OTP",
-        html: `<div style="font-size:16px;background-color:#ccc8c8;padding:10px;border-radius:5px;">Your OTP for email verification is: <strong>${verificationOtp}</strong></p><br/>
+        html: `<div style="font-size:16px;background-color:#ccc8c8;padding:10px;border-radius:5px; text-align:center;">Your OTP for email verification is: <strong>${verificationOtp}</strong></p><br/>
                <p>Click the link to verify your email.</p><br/>
                <a href="${process.env.NEXT_PUBLIC_BASE_URL}/vrifyemail?email=${email}&otp=${verificationOtp}" style="color:white;background-color:blue;padding:10px 20px;text-decoration:none;border-radius:5px;">Verify Email</a><br/>
                <p>This OTP is valid for 5 minutes.</p>

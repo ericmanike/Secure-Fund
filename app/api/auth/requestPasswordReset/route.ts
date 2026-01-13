@@ -78,7 +78,7 @@ if (!success) {
       from: 'Nyamekye Loans <info@nyamekyeloans.com>',
       to: `${user.email}`,
       subject: 'Request to reset your password',
-      html: `<div style="font-family:Arial,sans-serif;line-height:1.6; background-color:#ccc8c8; padding:20px; border-radius:8px;">
+      html: `<div style="font-family:Arial,sans-serif;line-height:1.6; background-color:#ccc8c8; padding:20px; border-radius:8px ; text-align:center;">
         <h1>Hi ${user.fullName},</h1>
         <p>You requested to reset your password. Click the link below to set a new password:</p>
         <a href="${process.env.NEXT_PUBLIC_BASE_URL}/resetPassword?email=${user.email}&token=${token}"  style="color:white;background-color:blue;padding:10px 20px;text-decoration:none;border-radius:5px;">Reset Password</a>
