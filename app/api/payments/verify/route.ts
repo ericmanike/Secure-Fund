@@ -5,6 +5,7 @@ import connectDB from '@/lib/mongodb'
 import {Repayment} from '@/lib/models/Repaid'
 
 
+
 export async function POST(request: NextRequest) {
   try {
     const user = getAuthUser(request)
@@ -17,6 +18,8 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
+
+
 
     const { reference, loanId } = await request.json()
 
@@ -39,9 +42,27 @@ export async function POST(request: NextRequest) {
 
     const paystackData = await verifyResponse.json()
      const loan = await Loan.findById(loanId)
-     const payStackAmount = Number(paystackData.data.amount / 100)
+
+     
+
+    if(!loan) {
+      return NextResponse.json(
+        { error: 'You do not have a loan with this ID' },
+        { status: 404 }
+      )
+    }
+
+
+
+    const payStackAmount = Number(paystackData.data.amount / 100)
+
+    const currentDate = new Date()
+    const loanDueDate = new Date(loan.dueDate!)
          
-    const interest =(Number(loan!.loanType)/100)*loan!.loanAmount
+    const interest = currentDate  > loanDueDate    ?  ((Number(loan!.loanType) + 3 )/100)*loan!.loanAmount : (Number(loan!.loanType)/100)*loan!.loanAmount 
+   
+    console.log('Calculated interest:', interest)
+
     const expectedAmount = loan!.loanAmount + interest
 
 
@@ -92,7 +113,7 @@ export async function POST(request: NextRequest) {
         transaction: paystackData.data,
       })
     } else {
-      
+
       return NextResponse.json(
         { message: 'Unauthorized or invalid payment details' },
         { status: 400 }

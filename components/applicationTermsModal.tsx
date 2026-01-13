@@ -45,7 +45,7 @@ const router = useRouter()
         </div>
 
         <div className="flex  justify-between mt-6">
-          <button onClick={()=> router.push('/')} className="px-6 py-2 rounded-md bg-slate-600 text-white hover:bg-slate-700 transition-colors">
+          <button onClick={()=> router.push('/')}  className="px-6 py-2 rounded-md bg-gray-300 text-gray-800 hover:bg-gray-400 transition-colors">
              Not interested!
           </button>
           <button

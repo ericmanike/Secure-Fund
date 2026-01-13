@@ -10,8 +10,8 @@ export async function calculatePenalty(userId: string): Promise<number> {
     const currentDate = new Date();
 
     for (const loan of loans) {
-        if (loan.dueDate && currentDate > loan.dueDate) {
-            const overdueDays = Math.floor((currentDate.getTime() - loan.dueDate.getTime()) / (1000 * 3600 * 24));
+        if (loan.dueDate && currentDate > new Date(loan.dueDate)) {
+            const overdueDays = Math.floor((currentDate.getTime() - new Date(loan.dueDate).getTime()) / (1000 * 3600 * 24));
             const penaltyRate = 0.01; 
             const penalty = loan.loanAmount * penaltyRate * overdueDays;
             totalPenalty += penalty;
@@ -19,3 +19,4 @@ export async function calculatePenalty(userId: string): Promise<number> {
     }   
     return totalPenalty;
 }
+

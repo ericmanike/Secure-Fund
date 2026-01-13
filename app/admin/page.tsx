@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
+import ConfirmPopup from '@/components/confirmUpdate'
+import { useToast } from '@/components/toastProvider'
 
 
 interface Loan {
@@ -36,15 +38,16 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [loans, setLoans] = useState<Loan[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'repaid'>('all')
+  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'repaid' | 'overdue'>('all')
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null)
   const [userDocuments, setUserDocuments] = useState<UserDocuments | null>(null)
   const [loadingDocuments, setLoadingDocuments] = useState(false)
   const [showDocumentsModal, setShowDocumentsModal] = useState(false)
+  const { showToast } = useToast();
 
 //comfirm state
 
-const [confirmstate, setConfirmstate] = useState(false);
+const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
 
 
   useEffect(() => {
@@ -143,20 +146,21 @@ const [confirmstate, setConfirmstate] = useState(false);
     : loans.filter(loan => loan.status === filter)
 
 
-  const deleteLoan = async (loanId:string) => {
+  const deleteLoan = async (loanId:string | undefined) => {
     try {
       const response = await fetch(`/api/loans/delete?loanId=${loanId}`, {
         method: 'DELETE',
       })
       if (response.ok) {
-        alert('Loan application deleted successfully')
+        showToast('Loan application deleted successfully','success');
         setShowDocumentsModal(false)
         setSelectedLoan(null)
         fetchLoans()
        
       }
       else {
-        alert('Failed to delete loan application')
+        const errorData = await response.json()
+        showToast(`Failed to delete loan application: ${errorData.error || 'Unknown error'}`,'error');
       }
     } catch (error) {
       console.error('Error deleting loan application:', error)
@@ -272,6 +276,18 @@ const [confirmstate, setConfirmstate] = useState(false);
                 <tbody>
                   {filteredLoans.map((loan) => (
                     <tr key={loan.id} className="border-b bottom-2  hover:bg-gray-50">
+                    
+                    <ConfirmPopup
+                              isOpen={!!loamToDelete}
+                              onClose={() => setLoamToDelete(null)}
+                              task={() => {
+                                deleteLoan(loamToDelete?.id);
+                                setLoamToDelete(null);
+                              }}
+                              msg= {<div> Are you sure you want to delete {loamToDelete?.fullName}'s loan with status <span style={{color:"blue",fontWeight:"bold"}}>{loamToDelete?.status}</span>? <span style={{color:"red"}}><br /> This action is irreversible.</span></div>}
+                            /> 
+                       
+
                       <td className="py-3 px-4">{loan.fullName}</td>
                       <td className="py-3 px-4">{loan.email}</td>
                       <td className="py-3 px-4">{loan.phoneNumber}</td>
@@ -311,6 +327,7 @@ const [confirmstate, setConfirmstate] = useState(false);
                               }}
                               className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition"
                             >
+              
                               View Docs
                             </button>
                             <div className="flex space-x-2">
@@ -335,6 +352,8 @@ const [confirmstate, setConfirmstate] = useState(false);
                         )}
                         {loan.status !== 'pending' && (
                           <div className="flex flex-col space-y-2 justify-center items-center">
+
+                             
                             <button
                               onClick={() => {
                                 setSelectedLoan(loan)
@@ -345,7 +364,7 @@ const [confirmstate, setConfirmstate] = useState(false);
                               View Docs
                             </button>
                             <span className="text-gray-500 text-sm">Reviewed</span>
-                            <button onClick={() => deleteLoan(loan.id)} className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition">
+                            <button onClick={() => setLoamToDelete(loan)} className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition">
                               delete loan
                             </button>
                           </div>

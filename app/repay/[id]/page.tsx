@@ -10,6 +10,7 @@ interface Loan {
   fullName: string
   email: string
   loanType: number
+  dueDate: string
 }
 
 declare global {
@@ -40,6 +41,11 @@ export default function RepayLoan() {
   const [amountToPay, setAmountToPay] = useState<number | null>(null)
    const [isModalOpen,setIsModalOpen]  = useState(true)
   
+
+  const [dueAmount, setDueAmount] = useState<number>(0);
+  const [dueDate, setDueDate] = useState<Date | null>(new Date(loan?.dueDate!));
+
+
 
   useEffect(() => {
     // Check for role cookie since token is httpOnly
@@ -103,7 +109,7 @@ useEffect(() => {
       const reference = `LOAN_${loanId}_${Date.now()}`
 
       // Initialize Paystack
-      const paystackKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY 
+      const paystackKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY
       
       if (!paystackKey) {
      
@@ -112,11 +118,24 @@ useEffect(() => {
       }
       
       const Amount = loan.loanAmount + (loan.loanType/100)*loan.loanAmount
+
+
+
+        const currentDate = new Date()
+        const loanDueDate = new Date(loan.dueDate!)
+
+      const dueAmount = currentDate > loanDueDate ? Amount + (0.03 * loan.loanAmount) : Amount;
+
+
+
+
+
+
       const handler = window.PaystackPop.setup({
         key: paystackKey,
         email: loan.email,
         currency: 'GHS',
-        amount: parseFloat(Amount.toString()) * 100, // Convert to kobo
+        amount: parseFloat(dueAmount.toString()) * 100, // Convert to kobo
         
         ref: reference,
         onClose: () => {
@@ -187,7 +206,11 @@ useEffect(() => {
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                 <p><span className="font-semibold"> Amount borrowed:</span> GHS {loan.loanAmount.toLocaleString()}</p>
                 <p><span className="font-semibold"> Interest on the loan:</span> {loan.loanType}%</p>
-                <p><span className="font-semibold">Total Amount to Repay:</span> GHS {(loan.loanAmount + (loan.loanType/100)*loan.loanAmount).toLocaleString()}</p>
+                <p><span className="font-semibold"> Due date</span> {new Date(loan.dueDate!).toLocaleDateString()}</p>
+                {  new Date() > new Date(loan.dueDate!) && (
+                  <p className="text-red-600 font-semibold">Note: Your loan is overdue. A late payment interest of 3% has been applied.</p>
+                )}
+                <p><span className="font-semibold">Total Amount to Repay:</span> GHS {loan.loanAmount + (loan.loanType/100)*loan.loanAmount + (new Date() > new Date(loan.dueDate!) ? 0.03 * loan.loanAmount : 0)}</p>
                 <p><span className="font-semibold">Name:</span> {loan.fullName}</p>
                 <p><span className="font-semibold">Email:</span> {loan.email}</p>
               </div>

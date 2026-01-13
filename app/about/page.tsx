@@ -96,7 +96,7 @@ export default function About() {
   <section>
     <h2 className="text-lg font-semibold mb-2">2. Eligibility</h2>
     <ul className="list-disc list-inside space-y-1">
-    
+     <li>Must be 18 years or older</li>
       <li>Be a student of a recognized tertiary institution</li>
       <li>Provide accurate and verifiable information</li>
       <li>Possess a valid Ghana Card  and Student ID (where applicable)</li>

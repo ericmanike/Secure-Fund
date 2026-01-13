@@ -429,7 +429,7 @@ export default function Apply() {
 
                   <div>
                   <label htmlFor="scholarStatus" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Are you a Scholar? <span className="text-red-500">*</span>
+                    Are you a  MCF Scholar? <span className="text-red-500">*</span>
                   </label>
                   <Field
                     as="select"

@@ -1,12 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import Cloud from '@/lib/cloudinary'
 import ShowCardModal from '@/components/showCardModal'
 import { useToast } from '@/components/toastProvider'
+import OverduePopup from '@/components/overduePopup'
+import { tree } from 'next/dist/build/templates/app-page'
 
 
 interface Loan {
@@ -47,7 +49,9 @@ export default function Dashboard() {
 
       const {showToast} = useToast()
 
+//overdue popup
 
+const [showOverduePopup, setShowOverduePopup] = useState(false);
 
   //show image modal
 
@@ -86,12 +90,41 @@ export default function Dashboard() {
         console.log('Fetched loans:', data)
         setLoans(data.loans)
       }
+    
+      
+     
+
     } catch (error) {
       console.error('Error fetching loans:', error)
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+     setTimeout(() => {
+      const anyOverdue = loans.some(loan => loan.status === 'approved' && new Date(loan.dueDate) < new Date());
+      if (anyOverdue){
+                setShowOverduePopup(true);
+      }
+      console.log('Checked for overdue loans:', anyOverdue);  
+    }, 5000);
+
+   
+   
+
+
+
+  }, [ loans]);
+
+ 
+
+
+
+
+
+
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -140,7 +173,6 @@ export default function Dashboard() {
 
 
 
-
   if (loading) {
     return (
       <main className="min-h-screen py-16 bg-gray-50 flex items-center justify-center">
@@ -165,15 +197,10 @@ export default function Dashboard() {
   }
 
 
-
-
   return (
-
-
-
-
     <main className="min-h-screen py-16 bg-gray-50">
       <ShowCardModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}   image={modalImage}/>
+      <OverduePopup isOpen={showOverduePopup} dueDate='15-01-2026'   amountDue={10} onClose={() => {router.push(`/repay/${(loans.filter(loan=>loan.status === 'approved'))[0].id} `);}} />
       <div className="container mx-auto px-4 max-w-6xl">
         <h1 className=" text-2xl md:text-4xl font-bold mb-8 text-gray-800">Application Dashboard</h1>
 
@@ -243,7 +270,7 @@ export default function Dashboard() {
                       <td className="py-3 px-4">GHS {loan.loanAmount.toLocaleString()}</td>
                       <td className="py-3 px-4">{loan?.loanType}%</td>
                       <td className="py-3 px-4"> 
-                        GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount)).toLocaleString()}
+                        GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount) + (new Date() > new Date(loan.dueDate!) ? 0.03 * loan.loanAmount : 0)).toLocaleString()}
                       </td>
                       <td className="py-3 px-4">{loan.school =='Other' ? loan.otherSchool : loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
