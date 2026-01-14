@@ -201,13 +201,13 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Admin Dashboard</h1>
 
         {/* Filter Section */}
-        <div className="flex flex-row justify-between items-center p-4 rounded-lg shadow-md mb-6">
-          <div className="flex space-x-4 h-10">
+        <div className="flex flex-row flex-wrap justify-between items-center p-2 md:p-4 rounded-lg shadow-md mb-3 md:mb-6">
+          <div className="flex flex-wrap text-[12px] md:text-[16px] space-x-1 md:space-x-4  h-fit">
             <button
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg font-semibold transition ${
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
                 filter === 'all' 
-                  ? 'bg-primary-600 text-white' 
+                  ? 'bg-blue-600 text-white' 
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -215,9 +215,9 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
             </button>
             <button
               onClick={() => setFilter('pending')}
-              className={`px-4 py-2 rounded-lg font-semibold transition ${
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
                 filter === 'pending' 
-                  ? 'bg-primary-600 text-white' 
+                  ? 'bg-blue-600 text-white' 
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -225,9 +225,9 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
             </button>
             <button
               onClick={() => setFilter('approved')}
-              className={`px-4 py-2 rounded-lg font-semibold transition ${
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
                 filter === 'approved' 
-                  ? 'bg-primary-600 text-white' 
+                  ? 'bg-blue-600 text-white' 
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -235,9 +235,9 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
             </button>
             <button
               onClick={() => setFilter('rejected')}
-              className={`px-4 py-2 rounded-lg font-semibold transition ${
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
                 filter === 'rejected' 
-                  ? 'bg-primary-600 text-white' 
+                  ? 'bg-blue-600 text-white' 
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -248,9 +248,9 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
 
           <button
               onClick={() => setFilter('repaid')}
-              className={`px-4 py-2 rounded-lg font-semibold transition ${
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
                 filter === 'repaid' 
-                  ? 'bg-primary-600 text-white' 
+                  ? 'bg-blue-600 text-white' 
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
