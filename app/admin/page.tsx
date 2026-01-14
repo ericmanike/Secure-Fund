@@ -202,7 +202,7 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
 
         {/* Filter Section */}
         <div className="flex flex-row flex-wrap justify-between items-center p-2 md:p-4 rounded-lg shadow-md mb-3 md:mb-6">
-          <div className="flex flex-wrap text-[12px] md:text-[16px] space-x-1 md:space-x-4  h-fit">
+          <div className="flex flex-wrap text-[12px] md:text-[16px] space-x-1  md:space-x-4  h-fit">
             <button
               onClick={() => setFilter('all')}
               className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
@@ -262,7 +262,7 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
           </div>
           <button
               onClick={() => setShowpdf(true)}
-              className={`mt-4 px-4 py-2 rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition`}
+              className={`hidden md:block mt-4 px-4 py-2 rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition`}
             >
               Generate Report, PDF
             </button>
