@@ -62,9 +62,13 @@ const [showOverduePopup, setShowOverduePopup] = useState(false);
     const role = Cookies.get('role')
     if (!role) {
       router.push('/login')
+
+    
+    }else if (role == 'admin'){ {
+      router.push('/admin')
       return
     }
-
+  }
     fetchUser()
     fetchLoans()
   }, [router])

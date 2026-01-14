@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import ConfirmPopup from '@/components/confirmUpdate'
 import { useToast } from '@/components/toastProvider'
+import LoanPDF from '@/components/LoanPDF'
+import { PDFViewer } from '@react-pdf/renderer'
+import Cloud from '@/lib/cloudinary'
 
 
 interface Loan {
@@ -32,6 +35,9 @@ interface Loan {
 interface UserDocuments {
   ghanaCardImage?: string
   studentIdImage?: string
+  fullName?: string
+  phoneNumber?: string
+  email?: string
 }
 
 export default function AdminDashboard() {
@@ -45,6 +51,8 @@ export default function AdminDashboard() {
   const [showDocumentsModal, setShowDocumentsModal] = useState(false)
   const { showToast } = useToast();
 
+
+  const [showpdf, setShowpdf] = useState(false);
 //comfirm state
 
 const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
@@ -91,6 +99,9 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
         setUserDocuments({
           ghanaCardImage: data.user.ghanaCardImage,
           studentIdImage: data.user.studentIdImage,
+          fullName: data.user.fullName,
+          phoneNumber: data.user.phoneNumber,
+          email: data.user.email,
         })
         setShowDocumentsModal(true)
       } else {
@@ -171,9 +182,17 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
   if (loading) {
     return (
       <main className="min-h-screen py-16 bg-gray-50 flex items-center justify-center">
+    
         <div className="text-xl">Loading...</div>
       </main>
     )
+  }
+  if (showpdf){
+    return (
+    <PDFViewer style={{   width:'100%', height:'95vh'}}>
+    <LoanPDF />
+  </PDFViewer>
+  )
   }
 
   return (
@@ -182,8 +201,8 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Admin Dashboard</h1>
 
         {/* Filter Section */}
-        <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-          <div className="flex space-x-4">
+        <div className="flex flex-row justify-between items-center p-4 rounded-lg shadow-md mb-6">
+          <div className="flex space-x-4 h-10">
             <button
               onClick={() => setFilter('all')}
               className={`px-4 py-2 rounded-lg font-semibold transition ${
@@ -241,6 +260,13 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
 
 
           </div>
+          <button
+              onClick={() => setShowpdf(true)}
+              className={`mt-4 px-4 py-2 rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition`}
+            >
+              Generate Report, PDF
+            </button>
+             
         </div>
 
         {/* Loans Table */}
@@ -325,7 +351,7 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                                 setSelectedLoan(loan)
                                 fetchUserDocuments(loan.userId)
                               }}
-                              className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition"
+                              className="bg-blue-600 w-full text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition"
                             >
               
                               View Docs
@@ -381,19 +407,40 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
         {/* Documents Modal */}
         {showDocumentsModal && selectedLoan && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-fit overflow-y-auto">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    Documents for {selectedLoan.fullName}
-                  </h2>
+                  <div className=' grid grid-cols-1 gap-2'> 
+                  <p className="  text-[#0F172A]  bg-black/5 w-fit px-3 py-2 rounded ">
+                    Full Name: <span className='font-semibold'>{userDocuments?.fullName}</span>
+                  </p>
+
+                  <p className='flex gap-3 bg-black/5 w-fit px-3 py-2 rounded'>
+                    
+                     Phone Number: <a href={`tel:${userDocuments?.phoneNumber}`} className="flex items-center space-x-2 text-white bg-green-700 rounded px-3 hover:underline">{selectedLoan.phoneNumber}
+                     </a>
+
+                  </p>
+
+                  <p className='flex gap-3 bg-black/5 w-fit px-3 py-2 rounded'>
+                    
+                     Email Address: <a href={`mailto:${userDocuments?.email}`} className="flex items-center space-x-2  text-white bg-green-700 rounded px-3 hover:underline">{selectedLoan.email}
+                     </a>
+
+                  </p>
+                  </div>
+
+                  
+                 
+                 
+
                   <button
                     onClick={() => {
                       setShowDocumentsModal(false)
                       setUserDocuments(null)
                       setSelectedLoan(null)
                     }}
-                    className="text-gray-500 hover:text-gray-700 text-2xl"
+                    className="self-start text-gray-500 hover:text-gray-700 text-2xl"
                   >
                     ×
                   </button>
@@ -413,30 +460,14 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                         </h3>
                         {userDocuments.ghanaCardImage ? (
                           <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
-                            <img
+                           <a href={userDocuments.ghanaCardImage} target="_blank" rel="noopener noreferrer" className="mb-4 inline-block">
+                            <Cloud
                               src={userDocuments.ghanaCardImage}
                               alt="Ghana Card"
-                              className="w-full h-auto rounded-lg max-h-96 object-contain"
-                              onError={(e) => {
-                                console.error('Error loading Ghana Card image:', userDocuments.ghanaCardImage)
-                                const target = e.target as HTMLImageElement
-                                target.style.display = 'none'
-                                const parent = target.parentElement
-                                if (parent) {
-                                  const errorDiv = document.createElement('div')
-                                  errorDiv.className = 'text-red-500 text-sm p-2'
-                                  errorDiv.innerHTML = `
-                                    <p>Failed to load image</p>
-                                    <p class="text-xs break-all">URL: ${userDocuments.ghanaCardImage}</p>
-                                    <a href="${userDocuments.ghanaCardImage}" target="_blank" class="text-blue-500 underline">Open in new tab</a>
-                                  `
-                                  parent.appendChild(errorDiv)
-                                }
-                              }}
-                              onLoad={() => {
-                                console.log('Ghana Card image loaded successfully:', userDocuments.ghanaCardImage)
-                              }}
+                              width={500}
+                              height={300}
                             />
+                            </a>
                           </div>
                         ) : (
                           <p className="text-gray-500">No Ghana Card image available</p>
@@ -450,35 +481,28 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                         </h3>
                         {userDocuments.studentIdImage ? (
                           <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
-                            <img
+                            <a href={userDocuments.studentIdImage} target="_blank" rel="noopener noreferrer" className="mb-4 inline-block">
+                            <Cloud
                               src={userDocuments.studentIdImage}
                               alt="Student ID"
-                              className="w-full h-auto rounded-lg max-h-96 object-contain"
-                              onError={(e) => {
-                                console.error('Error loading Student ID image:', userDocuments.studentIdImage)
-                                const target = e.target as HTMLImageElement
-                                target.style.display = 'none'
-                                const parent = target.parentElement
-                                if (parent) {
-                                  const errorDiv = document.createElement('div')
-                                  errorDiv.className = 'text-red-500 text-sm p-2'
-                                  errorDiv.innerHTML = `
-                                    <p>Failed to load image</p>
-                                    <p class="text-xs break-all">URL: ${userDocuments.studentIdImage}</p>
-                                    <a href="${userDocuments.studentIdImage}" target="_blank" class="text-blue-500 underline">Open in new tab</a>
-                                  `
-                                  parent.appendChild(errorDiv)
-                                }
-                              }}
-                              onLoad={() => {
-                                console.log('Student ID image loaded successfully:', userDocuments.studentIdImage)
-                              }}
+                              width={500}
+                              height={300}
                             />
+                            </a>
+                         
                           </div>
                         ) : (
                           <p className="text-gray-500">No Student ID image available</p>
                         )}
                       </div>
+
+                      <button>
+
+
+                      </button>
+
+
+                  
                     </div>
                   </div>
                 ) : (
@@ -509,6 +533,8 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
           </div>
         )}
       </div>
+
+      
     </main>
   )
 }
