@@ -319,10 +319,19 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                       <td className="py-3 px-4">{loan.phoneNumber}</td>
                       <td className="py-3 px-4">{loan.school =='Other' ? loan.otherSchool : loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
-                      <td className="py-3 px-4">GHS {loan.loanAmount.toLocaleString()}</td>
+                      <td className="py-3 px-4">{new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(loan.loanAmount)}</td>
                       <td className="py-3 px-4">{loan?.loanType}%</td>
                       <td className="py-3 px-4"> 
-                      GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount)).toLocaleString()}
+                    
+                         {loan.dueDate && (() => {
+                          const principal = loan.loanAmount;
+                          const interest = (loan.loanType / 100) * principal;
+                          const penalty = new Date(loan.dueDate) < new Date() ? 0.03 * principal : 0;
+                          return new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(
+                            principal + interest + penalty
+                          );
+                        })()}
+                        
                       </td>
                       <td className="py-3 px-4 max-w-xs truncate" title={loan.reason}>
                         {loan.reason}

@@ -8,7 +8,6 @@ import Cloud from '@/lib/cloudinary'
 import ShowCardModal from '@/components/showCardModal'
 import { useToast } from '@/components/toastProvider'
 import OverduePopup from '@/components/overduePopup'
-import { tree } from 'next/dist/build/templates/app-page'
 
 
 interface Loan {
@@ -204,7 +203,7 @@ const [showOverduePopup, setShowOverduePopup] = useState(false);
   return (
     <main className="min-h-screen py-16 bg-gray-50">
       <ShowCardModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}   image={modalImage}/>
-      <OverduePopup isOpen={showOverduePopup} dueDate='15-01-2026'   amountDue={10} onClose={() => {router.push(`/repay/${(loans.filter(loan=>loan.status === 'approved'))[0].id} `);}} />
+      <OverduePopup isOpen={showOverduePopup} dueDate={loans.length > 0 ? loans[0].dueDate : ''}   amountDue={10} onClose={() => {router.push(`/repay/${(loans.filter(loan=>loan.status === 'approved'))[0].id} `);}} />
       <div className="container mx-auto px-4 max-w-6xl">
         <h1 className=" text-2xl md:text-4xl font-bold mb-8 text-gray-800">Application Dashboard</h1>
 
@@ -271,10 +270,18 @@ const [showOverduePopup, setShowOverduePopup] = useState(false);
                 <tbody>
                   {loans.map((loan) => (
                     <tr key={loan.id} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4">GHS {loan.loanAmount.toLocaleString()}</td>
+                      <td className="py-3 px-4">{new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(loan.loanAmount)}</td>
                       <td className="py-3 px-4">{loan?.loanType}%</td>
                       <td className="py-3 px-4"> 
-                        GHS {loan.loanAmount + (loan.loanType/100)*loan.loanAmount + (new Date() > new Date(loan.dueDate!) ? 0.03 * loan.loanAmount : 0)}
+                            {loan.dueDate && (() => {
+                          const principal = loan.loanAmount;
+                          const interest = (loan.loanType / 100) * principal;
+                          const penalty = new Date(loan.dueDate) < new Date() ? 0.03 * principal : 0;
+                          return new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(
+                            principal + interest + penalty
+                          );
+                        })()}
+                         
                       </td>
                       <td className="py-3 px-4">{loan.school =='Other' ? loan.otherSchool : loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>

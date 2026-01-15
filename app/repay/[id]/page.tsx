@@ -81,7 +81,7 @@ useEffect(() => {
         const foundLoan = data.loans.find((l: Loan) => l.id === loanId)
         if (foundLoan && foundLoan.status === 'approved') {
           setLoan(foundLoan)
-          setAmountToPay(foundLoan.loanAmount + (foundLoan.loanType/100)*foundLoan.loanAmount)
+          setAmountToPay(foundLoan.loanAmount + (foundLoan.loanType/100)*foundLoan.loanAmount + (new Date() > new Date(foundLoan.dueDate) ? 0.03 * foundLoan.loanAmount : 0))
         } else {
           router.push('/dashboard')
         }
@@ -125,6 +125,7 @@ useEffect(() => {
         const loanDueDate = new Date(loan.dueDate!)
 
       const dueAmount = currentDate > loanDueDate ? Amount + (0.03 * loan.loanAmount) : Amount;
+      setDueAmount(dueAmount);
 
 
 
@@ -204,13 +205,13 @@ useEffect(() => {
             <div>
               <h2 className="text-xl font-semibold mb-4 text-gray-800">Loan Details</h2>
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                <p><span className="font-semibold"> Amount borrowed:</span> GHS {loan.loanAmount.toLocaleString()}</p>
+                <p><span className="font-semibold"> Amount borrowed:</span> {new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(loan.loanAmount)}</p>
                 <p><span className="font-semibold"> Interest on the loan:</span> {loan.loanType}%</p>
                 <p><span className="font-semibold"> Due date</span> {new Date(loan.dueDate!).toLocaleDateString()}</p>
                 {  new Date() > new Date(loan.dueDate!) && (
                   <p className="text-red-600 font-semibold">Note: Your loan is overdue. A late payment interest of 3% has been applied.</p>
                 )}
-                <p><span className="font-semibold">Total Amount to Repay:</span> GHS {loan.loanAmount + (loan.loanType/100)*loan.loanAmount + (new Date() > new Date(loan.dueDate!) ? 0.03 * loan.loanAmount : 0)}</p>
+                <p><span className="font-semibold">Total Amount to Repay:</span> {new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(loan.loanAmount + (loan.loanType/100)*loan.loanAmount + (new Date() > new Date(loan.dueDate!) ? 0.03 * loan.loanAmount : 0))}</p>
                 <p><span className="font-semibold">Name:</span> {loan.fullName}</p>
                 <p><span className="font-semibold">Email:</span> {loan.email}</p>
               </div>
@@ -221,7 +222,7 @@ useEffect(() => {
               disabled={submitting}
               className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              {submitting ? 'Processing Payment...' : `Pay GHS ${amountToPay?.toLocaleString()}`}
+              {submitting ? 'Processing Payment...' : `Pay ${new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(amountToPay || 0)}`}
             </button>
 
             <p className="text-sm text-gray-500 text-center">

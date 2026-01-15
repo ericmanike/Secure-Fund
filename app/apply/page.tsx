@@ -448,7 +448,11 @@ export default function Apply() {
                   />
 
                    {values.loanAmount && Number(values.loanAmount) >= 100 && Number(values.loanAmount) <= 1000 && values.loanType && (
-                    <div className="text-slate-900 text-sm mt-1">Amount due will be {Math.round(Number(values.loanAmount) * (1 + Number(values.loanType) / 100))}</div>
+                    <div className=" text-sm mt-1 bg-green-600  rounded text-white text-center py-2 flex justify-
+                    between flex-col p-3 items-center"><div>Amount due will be <strong>{new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(Math.round(Number(values.loanAmount) * (1 + Number(values.loanType) / 100)))}</strong></div>
+                    <span className='text-xs'> This is inclusive of <strong>{values.loanType}</strong>% interest</span>
+                     <div className='bg-red-500 m-2 p-2 rounded'> Kindly  pay on time to avoid additional charges (  not less than 3%)</div>
+                    </div>
                    )}
 
                   <ErrorMessage name="loanAmount" component="div" className="text-red-500 text-sm mt-1" />
