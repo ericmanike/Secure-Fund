@@ -152,3 +152,4 @@ const Loan: Model<ILoan> = mongoose.models.Loan || mongoose.model<ILoan>('Loan',
 export default Loan
 
 
+

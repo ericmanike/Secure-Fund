@@ -425,7 +425,38 @@ export default function Apply() {
                   </Field>
                   <ErrorMessage name="loanType" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
+
+                 <div>
+                  <label htmlFor="loanAmount" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Loan Amount (GHS) <span className="text-red-500">*</span>
+                  </label>
+                  <Field
+                    type="number"
+                    id="loanAmount"
+                    name="loanAmount"
+                    max="1000"
+                    min="100"
+                    defaultValue={100}
+                    step={50}
+                     
+                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
+                      errors.loanAmount && touched.loanAmount
+                        ? 'border-red-500'
+                        : 'border-gray-700'
+                    }`}
+                    placeholder="Enter amount between GHS100.00 and GHS1,000.00"
+                  />
+
+                   {values.loanAmount && Number(values.loanAmount) >= 100 && Number(values.loanAmount) <= 1000 && values.loanType && (
+                    <div className="text-slate-900 text-sm mt-1">Amount due will be {Math.round(Number(values.loanAmount) * (1 + Number(values.loanType) / 100))}</div>
+                   )}
+
+                  <ErrorMessage name="loanAmount" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
                 
+                
+
+
 
                   <div>
                   <label htmlFor="scholarStatus" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -503,30 +534,8 @@ export default function Apply() {
             )}
 
 
-              {/* Loan Amount and Reason Fields */}
-                <div>
-                  <label htmlFor="loanAmount" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Loan Amount (GHS) <span className="text-red-500">*</span>
-                  </label>
-                  <Field
-                    type="number"
-                    id="loanAmount"
-                    name="loanAmount"
-                    max="1000"
-                    min="100"
-                    defaultValue={100}
-                    step={50}
-                     
-                    className={`w-full px-4 py-3 bg-gray-800 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none text-white placeholder-gray-400 ${
-                      errors.loanAmount && touched.loanAmount
-                        ? 'border-red-500'
-                        : 'border-gray-700'
-                    }`}
-                    placeholder="Enter amount between GHS100.00 and GHS1,000.00"
-                  />
-                  <ErrorMessage name="loanAmount" component="div" className="text-red-500 text-sm mt-1" />
-                </div>
-                
+              {/* Reason Fields */}
+               
                 {/* Reason Field */}
                 <div>
                   <label htmlFor="reason" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -584,5 +593,6 @@ export default function Apply() {
     </main>
   )
 }
+
 
 

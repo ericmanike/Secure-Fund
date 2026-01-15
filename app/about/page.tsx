@@ -250,3 +250,4 @@ By using Nyamekye Loans, you consent to the collection and use of your informati
 }
 
 
+

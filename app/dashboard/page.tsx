@@ -274,7 +274,7 @@ const [showOverduePopup, setShowOverduePopup] = useState(false);
                       <td className="py-3 px-4">GHS {loan.loanAmount.toLocaleString()}</td>
                       <td className="py-3 px-4">{loan?.loanType}%</td>
                       <td className="py-3 px-4"> 
-                        GHS{(loan.loanAmount + (loan.loanType / 100 * loan.loanAmount) + (new Date() > new Date(loan.dueDate!) ? 0.03 * loan.loanAmount : 0)).toLocaleString()}
+                        GHS {loan.loanAmount + (loan.loanType/100)*loan.loanAmount + (new Date() > new Date(loan.dueDate!) ? 0.03 * loan.loanAmount : 0)}
                       </td>
                       <td className="py-3 px-4">{loan.school =='Other' ? loan.otherSchool : loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
@@ -311,5 +311,6 @@ const [showOverduePopup, setShowOverduePopup] = useState(false);
     </main>
   )
 }
+
 
 
