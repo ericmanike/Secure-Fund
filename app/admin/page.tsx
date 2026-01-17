@@ -337,12 +337,12 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                         {loan.reason}
                       </td>
                       <td className="py-3 px-4">
-                        {new Date(loan.dateApplied).toLocaleDateString()}
+                        {loan.dateApplied ? Intl.DateTimeFormat('en-US',{dateStyle: 'medium'}).format(new Date(loan.dateApplied)) : 'Not set yet'}
                       </td>
 
 
                       <td className="py-3 px-4">
-                        {loan.dueDate ? new Date(loan.dueDate).toLocaleDateString() : 'Not set yet'}
+                        {loan.dueDate ? Intl.DateTimeFormat('en-US',{dateStyle: 'medium'}).format(new Date(loan.dueDate)) : 'Not set yet'}
                       </td>
                       <td className="py-3 px-4">
                         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(loan.status)}`}>

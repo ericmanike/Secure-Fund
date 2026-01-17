@@ -81,10 +81,11 @@ triggerOnce:true
     <div className=" bg-inherit  min-h-screen flex items-center justify-center  p-5">
   
       <div className={`bg-white shadow-lg   rounded-xl p-8 w-full max-w-lg`} ref={ref}>
-        <h2 className={`text-2xl font-bold text-blue-600 mb-5 text-center  transition-all duration-1000  relative after:absolute after:bottom-0 after:content-[''] after:bg-amber-950 
+        <h2 className={`text-2xl font-bold text-blue-600 mb-5 text-center  transition-all 
+        duration-1000  relative after:absolute after:bottom-0 after:content-[''] after:bg-amber-950 
            
           ${inView ? 'opacity-100 translate-x-0  ':'translate-x-[200px] opacity-0'} `}>
-          Contact SecureFund
+          Contact Nyamekye Loans
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

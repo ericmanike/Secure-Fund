@@ -103,7 +103,7 @@ export default function Home() {
             Benefits  Students 
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div className="bg-primary-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center">
+            <div className="bg-primary-50 p-6 rounded-lg  shadow-md hover:shadow-lg transition-shadow text-center">
               <div className="mb-4 flex justify-center">
                 <GraduationCap className="w-12 h-12 text-blue-600" />
               </div>

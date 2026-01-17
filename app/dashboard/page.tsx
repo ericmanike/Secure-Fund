@@ -246,9 +246,11 @@ const [showOverduePopup, setShowOverduePopup] = useState(false);
               <p className="mb-4">You haven't applied for any loans yet.</p>
               <Link
                 href="/apply"
-                className="text-primary-600 hover:text-primary-700 font-semibold"
+                
               >
+                <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
                 Apply for a loan now
+                </button>
               </Link>
             </div>
           ) : (
@@ -286,11 +288,11 @@ const [showOverduePopup, setShowOverduePopup] = useState(false);
                       <td className="py-3 px-4">{loan.school =='Other' ? loan.otherSchool : loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
                       <td className="py-3 px-4">
-                        {new Date(loan.dateApplied).toLocaleDateString()}
+                        {Intl.DateTimeFormat('en-GH', { dateStyle: 'medium' }).format(new Date(loan.dateApplied))}
                       </td>
 
                        <td className="py-3 px-4">
-                        {loan.dueDate ? new Date(loan.dueDate).toLocaleDateString() : 'Not set yet' }
+                        {loan.dueDate ? Intl.DateTimeFormat('en-GH', { dateStyle: 'medium' }).format(new Date(loan.dueDate)) : 'Not set yet' }
                       </td>
                       <td className="py-3 px-4">
                         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(loan.status)}`}>
