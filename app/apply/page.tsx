@@ -421,7 +421,7 @@ export default function Apply() {
                     <option value="" className="bg-gray-800">Select your loan type</option>
                     <option value={7} className="bg-gray-800">one weeks - 7% interest rate</option>
                     <option value={9} className="bg-gray-800">Two weeks - 9% interest rate</option>
-                    <option value={11} className="bg-gray-800">One month - 11% interest rate</option>
+                    <option value={11} className="bg-gray-800 text-slate-950 font-extrabold" disabled >One month - 11% interest rate(Unavailable)</option>
                   </Field>
                   <ErrorMessage name="loanType" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
