@@ -44,7 +44,7 @@ const validationSchema = Yup.object({
     .max(1000, 'Maximum loan amount is GHS 1,000')
     .required('Loan amount is required')
     .typeError('Loan amount must be a number'),
-  loanType:Yup.string().oneOf(['7','9','11']).required('Please select a loan type'),
+  loanType:Yup.string().oneOf(['7','9','13.5']).required('Please select a loan type'),
   scholarStatus: Yup.string()
     .oneOf(['yes', 'no'], 'Please select a valid status')
     .required('Scholar status is required'),
@@ -421,7 +421,7 @@ export default function Apply() {
                     <option value="" className="bg-gray-800">Select your loan type</option>
                     <option value={7} className="bg-gray-800">one weeks - 7% interest rate</option>
                     <option value={9} className="bg-gray-800">Two weeks - 9% interest rate</option>
-                    <option value={11} className="bg-gray-800 text-slate-950 font-extrabold" disabled >One month - 11% interest rate(Unavailable)</option>
+                    <option value={13.5} className="bg-gray-800 text-slate-950 font-extrabold" >One month - 13.5% interest rate</option>
                   </Field>
                   <ErrorMessage name="loanType" component="div" className="text-red-500 text-sm mt-1" />
                 </div>

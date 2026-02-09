@@ -10,8 +10,7 @@ export const metadata: Metadata = {
   keywords: 'student loans, Ghana, education loans, KNUST, UG, UCC, university loans',
 
 
-
-
+  
 
 
 
