@@ -53,15 +53,12 @@ export default function AdminDashboard() {
 
 
   const [showpdf, setShowpdf] = useState(false);
-//comfirm state
-
-const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
-
-
+  const [loanToRepay, setLoanToRepay] = useState<Loan | null>(null);
+  //comfirm state
   useEffect(() => {
     // Check for role cookie since token is httpOnly
     const role = Cookies.get('role')
-    
+
     if (!role || role !== 'admin') {
       router.push('/login')
       return
@@ -117,8 +114,8 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
     }
   }
 
-  const updateLoanStatus = async (loanId: string, status: 'approved' | 'rejected' | 'repaid') => {
-    if (!confirm(`Are you sure you want to ${status} this loan application?`)) {
+  const updateLoanStatus = async (loanId: string, status: 'approved' | 'rejected' | 'repaid', skipConfirm = false) => {
+    if (!skipConfirm && !confirm(`Are you sure you want to ${status} this loan application?`)) {
       return
     }
     try {
@@ -152,47 +149,26 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
     }
   }
 
-  const filteredLoans = filter === 'all' 
-    ? loans 
+  const filteredLoans = filter === 'all'
+    ? loans
     : loans.filter(loan => loan.status === filter)
 
 
-  const deleteLoan = async (loanId:string | undefined) => {
-    try {
-      const response = await fetch(`/api/loans/delete?loanId=${loanId}`, {
-        method: 'DELETE',
-      })
-      if (response.ok) {
-        showToast('Loan application deleted successfully','success');
-        setShowDocumentsModal(false)
-        setSelectedLoan(null)
-        fetchLoans()
-       
-      }
-      else {
-        const errorData = await response.json()
-        showToast(`Failed to delete loan application: ${errorData.error || 'Unknown error'}`,'error');
-      }
-    } catch (error) {
-      console.error('Error deleting loan application:', error)
-      alert('An error occurred while deleting the loan application')
-    }
-  }
 
   if (loading) {
     return (
       <main className="min-h-screen py-16 bg-gray-50 flex items-center justify-center">
-    
+
         <div className="text-xl">Loading...</div>
       </main>
     )
   }
-  if (showpdf){
+  if (showpdf) {
     return (
-    <PDFViewer style={{   width:'100%', height:'95vh'}}>
-    <LoanPDF />
-  </PDFViewer>
-  )
+      <PDFViewer style={{ width: '100%', height: '95vh' }}>
+        <LoanPDF />
+      </PDFViewer>
+    )
   }
 
   return (
@@ -201,58 +177,53 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Admin Dashboard</h1>
 
         {/* Filter Section */}
-        <div className="flex flex-row flex-wrap justify-between items-center p-2 md:p-4 rounded-lg shadow-md mb-3 md:mb-6">
-          <div className="flex flex-wrap text-[12px] md:text-[16px] space-x-1  md:space-x-4  h-fit">
+        <div className="flex flex-col md:flex-row flex-wrap justify-between items-start md:items-center gap-4 p-2 md:p-4 rounded-lg shadow-md mb-3 md:mb-6">
+          <div className="flex flex-wrap text-[12px] md:text-[16px] gap-2 h-fit">
             <button
               onClick={() => setFilter('all')}
-              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
-                filter === 'all' 
-                  ? 'bg-blue-600 text-white' 
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${filter === 'all'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+                }`}
             >
               All ({loans.length})
             </button>
             <button
               onClick={() => setFilter('pending')}
-              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
-                filter === 'pending' 
-                  ? 'bg-blue-600 text-white' 
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${filter === 'pending'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+                }`}
             >
               Pending ({loans.filter(l => l.status === 'pending').length})
             </button>
             <button
               onClick={() => setFilter('approved')}
-              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
-                filter === 'approved' 
-                  ? 'bg-blue-600 text-white' 
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${filter === 'approved'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+                }`}
             >
               Approved ({loans.filter(l => l.status === 'approved').length})
             </button>
             <button
               onClick={() => setFilter('rejected')}
-              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
-                filter === 'rejected' 
-                  ? 'bg-blue-600 text-white' 
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${filter === 'rejected'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+                }`}
             >
               Rejected ({loans.filter(l => l.status === 'rejected').length})
             </button>
 
 
 
-          <button
+            <button
               onClick={() => setFilter('repaid')}
-              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${
-                filter === 'repaid' 
-                  ? 'bg-blue-600 text-white' 
+              className={`p-2 md:px-4 py-2 rounded-lg font-semibold transition ${filter === 'repaid'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+                }`}
             >
               Repaid ({loans.filter(l => l.status === 'repaid').length})
             </button>
@@ -261,12 +232,12 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
 
           </div>
           <button
-              onClick={() => setShowpdf(true)}
-              className={`hidden md:block mt-4 px-4 py-2 rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition`}
-            >
-              Generate Report, PDF
-            </button>
-             
+            onClick={() => setShowpdf(true)}
+            className={`hidden md:block mt-4 px-4 py-2 rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition`}
+          >
+            Generate Report, PDF
+          </button>
+
         </div>
 
         {/* Loans Table */}
@@ -277,7 +248,7 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
             </div>
           ) : (
             <div className="overflow-x-auto -mx-6 md:mx-0">
-              <table className="w-full text-[12px] min-w-[800px] md:min-w-0 border-solid border-2 border-gray-200">
+              <table className="w-full text-[12px] min-w-max border-solid border-2 border-gray-200">
                 <thead>
                   <tr className="border-b  ">
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
@@ -286,13 +257,13 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">School</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Level</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Amount</th>
-                     <th className="text-left py-3 px-4 font-semibold text-gray-700"> Rate  </th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700"> Rate  </th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Total to repay</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Reason</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Date Applied</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Due Date</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700"  colSpan={10}>Collateral</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700" colSpan={10}>Collateral</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Scholar?</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Cohort</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
@@ -302,28 +273,28 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                 <tbody>
                   {filteredLoans.map((loan) => (
                     <tr key={loan.id} className="border-b bottom-2  hover:bg-gray-50">
-                    
-                    <ConfirmPopup
-                              isOpen={!!loamToDelete}
-                              onClose={() => setLoamToDelete(null)}
-                              task={() => {
-                                deleteLoan(loamToDelete?.id);
-                                setLoamToDelete(null);
-                              }}
-                              msg= {<div> Are you sure you want to delete {loamToDelete?.fullName}'s loan with status <span style={{color:"blue",fontWeight:"bold"}}>{loamToDelete?.status}</span>? <span style={{color:"red"}}><br /> This action is irreversible.</span></div>}
-                            /> 
-                       
-
+                      {loanToRepay && loanToRepay.id === loan.id && (
+                        <ConfirmPopup
+                          isOpen={true}
+                          onClose={() => setLoanToRepay(null)}
+                          task={() => {
+                            updateLoanStatus(loan.id, 'repaid', true);
+                            setLoanToRepay(null);
+                          }}
+                          msg={<div>Are you sure you want to mark {loan.fullName}&apos;s loan as <span style={{color:"#059669",fontWeight:"bold"}}>repaid</span>?</div>}
+                        />
+                      )}
+                      
                       <td className="py-3 px-4">{loan.fullName}</td>
                       <td className="py-3 px-4">{loan.email}</td>
                       <td className="py-3 px-4">{loan.phoneNumber}</td>
-                      <td className="py-3 px-4">{loan.school =='Other' ? loan.otherSchool : loan.school}</td>
+                      <td className="py-3 px-4">{loan.school == 'Other' ? loan.otherSchool : loan.school}</td>
                       <td className="py-3 px-4">Level {loan.level}</td>
                       <td className="py-3 px-4">{new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(loan.loanAmount)}</td>
                       <td className="py-3 px-4">{loan?.loanType}%</td>
-                      <td className="py-3 px-4"> 
-                    
-                         {loan.dueDate && (() => {
+                      <td className="py-3 px-4">
+
+                        {loan.dueDate && (() => {
                           const principal = loan.loanAmount;
                           const interest = (loan.loanType / 100) * principal;
                           const penalty = new Date(loan.dueDate) < new Date() ? 0.03 * principal : 0;
@@ -331,27 +302,27 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                             principal + interest + penalty
                           );
                         })()}
-                        
+
                       </td>
                       <td className="py-3 px-4 max-w-xs truncate" title={loan.reason}>
                         {loan.reason}
                       </td>
                       <td className="py-3 px-4">
-                        {loan.dateApplied ? Intl.DateTimeFormat('en-US',{dateStyle: 'medium'}).format(new Date(loan.dateApplied)) : 'Not set yet'}
+                        {loan.dateApplied ? Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(loan.dateApplied)) : 'Not set yet'}
                       </td>
 
 
                       <td className="py-3 px-4">
-                        {loan.dueDate ? Intl.DateTimeFormat('en-US',{dateStyle: 'medium'}).format(new Date(loan.dueDate)) : 'Not set yet'}
+                        {loan.dueDate ? Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(loan.dueDate)) : 'Not set yet'}
                       </td>
                       <td className="py-3 px-4">
                         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(loan.status)}`}>
                           {loan.status.charAt(0).toUpperCase() + loan.status.slice(1)}
                         </span>
                       </td>
-                      <td className="py-3 px-4"  colSpan={10}>{loan.collateral || 'N/A'}</td>
+                      <td className="py-3 px-4" colSpan={10}>{loan.collateral || 'N/A'}</td>
                       <td className="py-3 px-4">  {loan.scholar}   </td>
-                      <td className="py-3 px-4">  {loan.scholar === 'yes' ? loan.cohort :'N/A'}   </td>
+                      <td className="py-3 px-4">  {loan.scholar === 'yes' ? loan.cohort : 'N/A'}   </td>
                       <td className="py-3 px-4">
                         {loan.status === 'pending' && (
                           <div className="flex flex-col space-y-2">
@@ -362,24 +333,22 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                               }}
                               className="bg-blue-600 w-full text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition"
                             >
-              
+
                               View Docs
                             </button>
-                            <div className="flex space-x-2">
+                            <div className="flex flex-col xl:flex-row gap-2 mt-2">
                               <button
                                 onClick={() => updateLoanStatus(loan.id, 'approved')}
-                                className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition"
+                                className="bg-green-600 w-full text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition whitespace-nowrap"
                               >
                                 Approve
                               </button>
                               <button
                                 onClick={() => updateLoanStatus(loan.id, 'rejected')}
-                                className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition"
+                                className="bg-red-600 w-full text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition whitespace-nowrap"
                               >
                                 Reject
                               </button>
-                            
-                            
 
 
                             </div>
@@ -388,7 +357,7 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                         {loan.status !== 'pending' && (
                           <div className="flex flex-col space-y-2 justify-center items-center">
 
-                             
+
                             <button
                               onClick={() => {
                                 setSelectedLoan(loan)
@@ -399,9 +368,11 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                               View Docs
                             </button>
                             <span className="text-gray-500 text-sm">Reviewed</span>
-                            <button onClick={() => setLoamToDelete(loan)} className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition">
-                              delete loan
-                            </button>
+                            {loan.status !== 'repaid' && (
+                              <button onClick={() => setLoanToRepay(loan)} className="bg-emerald-600 text-white px-3 py-1 rounded text-sm hover:bg-emerald-700 transition">
+                                Mark as repaid
+                              </button>
+                            )}
                           </div>
                         )}
                       </td>
@@ -416,32 +387,32 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
         {/* Documents Modal */}
         {showDocumentsModal && selectedLoan && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-4xl w-full max-h-fit overflow-y-auto">
-              <div className="p-6">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-4 md:p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <div className=' grid grid-cols-1 gap-2'> 
-                  <p className="  text-[#0F172A]  bg-black/5 w-fit px-3 py-2 rounded ">
-                    Full Name: <span className='font-semibold'>{userDocuments?.fullName}</span>
-                  </p>
+                  <div className=' grid grid-cols-1 gap-2'>
+                    <p className="  text-[#0F172A]  bg-black/5 w-fit px-3 py-2 rounded ">
+                      Full Name: <span className='font-semibold'>{userDocuments?.fullName}</span>
+                    </p>
 
-                  <p className='flex gap-3 bg-black/5 w-fit px-3 py-2 rounded'>
-                    
-                     Phone Number: <a href={`tel:${userDocuments?.phoneNumber}`} className="flex items-center space-x-2 text-white bg-green-700 rounded px-3 hover:underline">{selectedLoan.phoneNumber}
-                     </a>
+                    <p className='flex gap-3 bg-black/5 w-fit px-3 py-2 rounded'>
 
-                  </p>
+                      Phone Number: <a href={`tel:${userDocuments?.phoneNumber}`} className="flex items-center space-x-2 text-white bg-green-700 rounded px-3 hover:underline">{selectedLoan.phoneNumber}
+                      </a>
 
-                  <p className='flex gap-3 bg-black/5 w-fit px-3 py-2 rounded'>
-                    
-                     Email Address: <a href={`mailto:${userDocuments?.email}`} className="flex items-center space-x-2  text-white bg-green-700 rounded px-3 hover:underline">{selectedLoan.email}
-                     </a>
+                    </p>
 
-                  </p>
+                    <p className='flex gap-3 bg-black/5 w-fit px-3 py-2 rounded'>
+
+                      Email Address: <a href={`mailto:${userDocuments?.email}`} className="flex items-center space-x-2  text-white bg-green-700 rounded px-3 hover:underline">{selectedLoan.email}
+                      </a>
+
+                    </p>
                   </div>
 
-                  
-                 
-                 
+
+
+
 
                   <button
                     onClick={() => {
@@ -469,13 +440,13 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                         </h3>
                         {userDocuments.ghanaCardImage ? (
                           <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
-                           <a href={userDocuments.ghanaCardImage} target="_blank" rel="noopener noreferrer" className="mb-4 inline-block">
-                            <Cloud
-                              src={userDocuments.ghanaCardImage}
-                              alt="Ghana Card"
-                              width={500}
-                              height={300}
-                            />
+                            <a href={userDocuments.ghanaCardImage} target="_blank" rel="noopener noreferrer" className="mb-4 inline-block">
+                              <Cloud
+                                src={userDocuments.ghanaCardImage}
+                                alt="Ghana Card"
+                                width={500}
+                                height={300}
+                              />
                             </a>
                           </div>
                         ) : (
@@ -491,14 +462,14 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                         {userDocuments.studentIdImage ? (
                           <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
                             <a href={userDocuments.studentIdImage} target="_blank" rel="noopener noreferrer" className="mb-4 inline-block">
-                            <Cloud
-                              src={userDocuments.studentIdImage}
-                              alt="Student ID"
-                              width={500}
-                              height={300}
-                            />
+                              <Cloud
+                                src={userDocuments.studentIdImage}
+                                alt="Student ID"
+                                width={500}
+                                height={300}
+                              />
                             </a>
-                         
+
                           </div>
                         ) : (
                           <p className="text-gray-500">No Student ID image available</p>
@@ -511,7 +482,7 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
                       </button>
 
 
-                  
+
                     </div>
                   </div>
                 ) : (
@@ -522,16 +493,16 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
 
                 {/* Action Buttons */}
                 {selectedLoan.status === 'pending' && (
-                  <div className="mt-6 flex justify-end space-x-4">
+                  <div className="mt-6 flex flex-col md:flex-row justify-end gap-4">
                     <button
                       onClick={() => updateLoanStatus(selectedLoan.id, 'rejected')}
-                      className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
+                      className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition w-full md:w-auto"
                     >
                       Reject Application
                     </button>
                     <button
                       onClick={() => updateLoanStatus(selectedLoan.id, 'approved')}
-                      className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+                      className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition w-full md:w-auto"
                     >
                       Approve Application
                     </button>
@@ -543,7 +514,7 @@ const [loamToDelete, setLoamToDelete] = useState<Loan | null>(null);
         )}
       </div>
 
-      
+
     </main>
   )
 }

@@ -95,6 +95,9 @@ useEffect(() => {
 
   const handlePayment = async () => {
 
+
+
+
     if (!loan) return
 
     if (!window.PaystackPop) {
