@@ -20,7 +20,7 @@ export async function PATCH(
 
     const { status } = await request.json()
 
-    if (status !== 'approved' && status !== 'rejected') {
+    if (status !== 'approved' && status !== 'rejected' && status !== 'repaid') {
       return NextResponse.json(
         { error: 'Invalid status' },
         { status: 400 }
